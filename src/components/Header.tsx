@@ -1,5 +1,6 @@
 import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Logo from './Logo';
 
 interface HeaderProps {
   currentPage: string;
@@ -8,6 +9,13 @@ interface HeaderProps {
 
 export default function Header({ currentPage, onNavigate }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -19,75 +27,85 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
   ];
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-lg shadow-nysc-900/5'
+          : 'bg-white shadow-sm'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div
-            className="flex items-center cursor-pointer"
+        <div className="flex justify-between items-center h-16 md:h-18">
+          <button
             onClick={() => {
               onNavigate('home');
               setIsMenuOpen(false);
             }}
+            className="flex items-center"
+            aria-label="Go to homepage"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">ND</span>
-            </div>
-            <span className="ml-3 text-xl font-bold text-gray-900">
-              NYSC <span className="text-green-600">Diary</span>
-            </span>
-          </div>
+            <Logo size="md" variant="full" />
+          </button>
 
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => onNavigate(item.id)}
-                className={`text-sm font-medium transition-colors ${
+                className={`relative px-4 py-2 text-sm font-body font-medium rounded-lg transition-all duration-200 ${
                   currentPage === item.id
-                    ? 'text-green-600'
-                    : 'text-gray-700 hover:text-green-600'
+                    ? 'text-nysc-600 bg-nysc-50'
+                    : 'text-gray-600 hover:text-nysc-600 hover:bg-gray-50'
                 }`}
               >
                 {item.label}
+                {currentPage === item.id && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-accent-500 rounded-full" />
+                )}
               </button>
             ))}
           </nav>
 
           <button
-            className="md:hidden"
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? (
-              <X className="h-6 w-6 text-gray-700" />
+              <X className="h-6 w-6 text-gray-700" aria-hidden="true" />
             ) : (
-              <Menu className="h-6 w-6 text-gray-700" />
+              <Menu className="h-6 w-6 text-gray-700" aria-hidden="true" />
             )}
           </button>
         </div>
       </div>
 
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  onNavigate(item.id);
-                  setIsMenuOpen(false);
-                }}
-                className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium ${
-                  currentPage === item.id
-                    ? 'bg-green-50 text-green-600'
-                    : 'text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <nav className="bg-white border-t border-gray-100 px-4 py-3 space-y-1" aria-label="Mobile navigation">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                onNavigate(item.id);
+                setIsMenuOpen(false);
+              }}
+              className={`flex items-center w-full text-left px-4 py-3 rounded-xl text-base font-body font-medium transition-all duration-200 ${
+                currentPage === item.id
+                  ? 'bg-nysc-50 text-nysc-600 border-l-4 border-accent-500'
+                  : 'text-gray-700 hover:bg-gray-50 hover:text-nysc-600'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+      </div>
     </header>
   );
 }

@@ -1,195 +1,154 @@
-import { Check, Instagram, TrendingUp, Users } from 'lucide-react';
-import { PricingPlan } from '../types';
-
-const pricingPlans: PricingPlan[] = [
-  {
-    name: 'Instagram Post',
-    price: '₦15,000',
-    features: [
-      '1 Instagram feed post',
-      'Reach: 50,000+ engaged followers',
-      'Story mention included',
-      '24-hour story highlight',
-      'Performance report'
-    ]
-  },
-  {
-    name: 'Story Package',
-    price: '₦8,000',
-    features: [
-      '3 Instagram stories',
-      'Swipe-up link included',
-      '24-hour exposure',
-      'Engagement tracking',
-      'Same-day posting'
-    ]
-  },
-  {
-    name: 'Full Campaign',
-    price: '₦35,000',
-    popular: true,
-    features: [
-      '2 Instagram feed posts',
-      '5 Instagram stories',
-      'WhatsApp group promotion',
-      '3-day story highlight',
-      'Newsletter feature',
-      'Detailed analytics report'
-    ]
-  }
-];
+import { Check, Users, Eye, TrendingUp, BarChart3, Megaphone } from 'lucide-react';
+import { Reveal } from '../hooks/useScrollReveal';
 
 const stats = [
-  { icon: Users, label: 'Monthly Reach', value: '200K+' },
-  { icon: Instagram, label: 'Instagram Followers', value: '75K+' },
-  { icon: TrendingUp, label: 'Engagement Rate', value: '8.5%' }
+  { icon: Eye, value: '200K+', label: 'Monthly Reach', color: 'from-nysc-500 to-nysc-600' },
+  { icon: Users, value: '75K+', label: 'Instagram Followers', color: 'from-accent-400 to-accent-500' },
+  { icon: TrendingUp, value: '5K+', label: 'WhatsApp Community', color: 'from-nysc-600 to-nysc-700' },
+  { icon: BarChart3, value: '50K+', label: 'Monthly Website Views', color: 'from-accent-500 to-accent-600' },
+];
+
+const plans = [
+  {
+    name: 'Starter',
+    price: '₦25,000',
+    period: '/week',
+    description: 'Perfect for small businesses',
+    features: ['1 Instagram Story Post', 'WhatsApp Community Blast', '48-hour Feature', 'Basic Analytics'],
+    accent: false,
+  },
+  {
+    name: 'Growth',
+    price: '₦75,000',
+    period: '/week',
+    description: 'Most popular for growing brands',
+    features: ['2 Instagram Feed Posts', '3 Instagram Story Posts', 'WhatsApp Community Blast', 'Website Feature (1 week)', 'Story/Reel Content', 'Priority Support'],
+    accent: true,
+  },
+  {
+    name: 'Premium',
+    price: '₦150,000',
+    period: '/month',
+    description: 'Maximum exposure & results',
+    features: ['6 Instagram Feed Posts', 'Unlimited Story Posts', 'WhatsApp Community Blast', 'Website Feature (1 month)', 'Custom Content Creation', 'Dedicated Account Manager', 'Performance Reports'],
+    accent: false,
+  },
 ];
 
 export default function Advertise() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-br from-green-600 to-green-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Advertise With Us</h1>
-            <p className="text-xl text-green-50 mb-8">
-              Reach thousands of Nigerian corps members with your brand message
-            </p>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-nysc-700 via-nysc-600 to-nysc-800 text-white">
+        <div className="deco-circle w-72 h-72 bg-accent-500/10 -top-20 right-10 animate-float-slow" aria-hidden="true" />
+        <div className="deco-circle w-40 h-40 bg-white/5 bottom-0 -left-10 animate-float" aria-hidden="true" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+          <div className="inline-flex items-center gap-2 bg-accent-500/20 border border-accent-500/30 rounded-full px-4 py-1.5 mb-4">
+            <Megaphone className="w-4 h-4 text-accent-400" aria-hidden="true" />
+            <span className="text-sm font-display font-medium text-accent-200">Reach Your Audience</span>
           </div>
+          <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">Advertise With Us</h1>
+          <p className="text-xl text-nysc-100 font-body max-w-2xl">
+            Connect your brand with Nigeria's largest community of corps members and young professionals
+          </p>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0" aria-hidden="true">
+          <svg viewBox="0 0 1440 40" fill="none" className="w-full"><path d="M0 20L720 40L1440 20V40H0V20Z" fill="#f9fafb"/></svg>
         </div>
       </section>
 
+      {/* Stats */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl shadow-sm p-8 text-center"
-            >
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <stat.icon className="w-8 h-8 text-green-600" />
+            <Reveal key={index} delay={index * 0.1}>
+              <div className="bg-white rounded-2xl shadow-sm p-6 text-center border border-gray-100 card-hover">
+                <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm`}>
+                  <stat.icon className="h-6 w-6 text-white" aria-hidden="true" />
+                </div>
+                <div className="text-2xl md:text-3xl font-display font-bold text-gray-900">{stat.value}</div>
+                <div className="text-sm text-gray-500 font-body mt-1">{stat.label}</div>
               </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">
-                {stat.value}
-              </div>
-              <div className="text-gray-600">{stat.label}</div>
-            </div>
+            </Reveal>
           ))}
         </div>
+      </section>
 
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Choose Your Package
-          </h2>
-          <p className="text-xl text-gray-600">
-            Flexible options to fit your marketing goals and budget
-          </p>
-        </div>
+      {/* Pricing */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Reveal>
+          <div className="text-center mb-12">
+            <span className="text-accent-500 font-display font-semibold text-sm uppercase tracking-wider">Pricing</span>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mt-1">Choose Your Plan</h2>
+            <p className="text-gray-600 font-body mt-3 max-w-xl mx-auto">
+              Flexible packages designed to help your brand reach the NYSC community effectively
+            </p>
+          </div>
+        </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {pricingPlans.map((plan, index) => (
-            <div
-              key={index}
-              className={`bg-white rounded-2xl shadow-sm overflow-hidden ${
-                plan.popular ? 'ring-2 ring-green-600' : ''
-              }`}
-            >
-              {plan.popular && (
-                <div className="bg-green-600 text-white text-center py-2 font-semibold text-sm">
-                  Most Popular
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {plans.map((plan, index) => (
+            <Reveal key={index} delay={index * 0.1}>
+              <div
+                className={`relative rounded-3xl p-8 card-hover ${
+                  plan.accent
+                    ? 'bg-gradient-to-br from-nysc-600 to-nysc-700 text-white shadow-xl shadow-nysc-600/20 scale-[1.02] border-2 border-nysc-500'
+                    : 'bg-white text-gray-900 border border-gray-200 shadow-sm'
+                }`}
+              >
+                {plan.accent && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-accent-500 text-white px-6 py-1.5 rounded-full text-sm font-display font-semibold shadow-md">
+                    Most Popular
+                  </div>
+                )}
+                <h3 className="text-xl font-display font-bold mb-2">{plan.name}</h3>
+                <p className={`text-sm font-body mb-6 ${plan.accent ? 'text-nysc-100' : 'text-gray-500'}`}>
+                  {plan.description}
+                </p>
+                <div className="flex items-baseline gap-1 mb-8">
+                  <span className="text-4xl font-display font-bold">{plan.price}</span>
+                  <span className={`text-sm font-body ${plan.accent ? 'text-nysc-200' : 'text-gray-400'}`}>{plan.period}</span>
                 </div>
-              )}
-              <div className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  {plan.name}
-                </h3>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">
-                    {plan.price}
-                  </span>
-                </div>
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start">
-                      <Check className="w-5 h-5 text-green-600 mr-3 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{feature}</span>
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm font-body">
+                      <Check className={`w-5 h-5 flex-shrink-0 ${plan.accent ? 'text-accent-300' : 'text-nysc-500'}`} aria-hidden="true" />
+                      <span className={plan.accent ? 'text-white/90' : 'text-gray-700'}>{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <a
-                  href="mailto:help@nyscdiary.com?subject=Advertisement Request"
-                  className={`block w-full text-center py-3 rounded-lg font-semibold transition-colors ${
-                    plan.popular
-                      ? 'bg-green-600 text-white hover:bg-green-700'
-                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                  href={`mailto:help@nyscdiary.com?subject=Advertising Inquiry - ${plan.name} Plan`}
+                  className={`block text-center py-3.5 rounded-xl font-display font-semibold transition-all duration-200 ${
+                    plan.accent
+                      ? 'bg-white text-nysc-700 hover:bg-nysc-50 shadow-lg'
+                      : 'bg-nysc-600 text-white hover:bg-nysc-500 shadow-md shadow-nysc-600/20'
                   }`}
                 >
-                  Request Invoice
+                  Get Started
                 </a>
               </div>
-            </div>
+            </Reveal>
           ))}
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm p-8 md:p-12">
-          <div className="md:flex items-center justify-between">
-            <div className="mb-6 md:mb-0">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                Ready to Get Started?
-              </h3>
-              <p className="text-gray-600">
-                Contact us for custom packages and long-term partnerships
-              </p>
-            </div>
-            <a
-              href="mailto:help@nyscdiary.com"
-              className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-            >
-              Contact Us
-            </a>
-          </div>
         </div>
       </section>
 
-      <section className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-            Why Advertise With NYSC Diary?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div>
-              <div className="text-green-600 font-bold text-xl mb-2">
-                Targeted Audience
-              </div>
-              <p className="text-gray-600">
-                Reach Nigerian corps members actively seeking products and services
-              </p>
-            </div>
-            <div>
-              <div className="text-green-600 font-bold text-xl mb-2">
-                High Engagement
-              </div>
-              <p className="text-gray-600">
-                Our community is highly engaged and responsive to relevant content
-              </p>
-            </div>
-            <div>
-              <div className="text-green-600 font-bold text-xl mb-2">
-                Trusted Platform
-              </div>
-              <p className="text-gray-600">
-                Built strong credibility within the NYSC community
-              </p>
-            </div>
-            <div>
-              <div className="text-green-600 font-bold text-xl mb-2">
-                Proven Results
-              </div>
-              <p className="text-gray-600">
-                Track record of successful campaigns with measurable ROI
-              </p>
-            </div>
-          </div>
+      {/* Why Advertise */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-nysc-700 via-nysc-600 to-nysc-800 text-white py-20 mt-8">
+        <div className="deco-circle w-48 h-48 bg-accent-500/10 top-0 right-20 animate-float-slow" aria-hidden="true" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <Reveal>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Ready to Grow Your Brand?</h2>
+            <p className="text-xl mb-8 text-nysc-100 font-body max-w-2xl mx-auto">
+              Contact us today and let's create a custom advertising strategy that delivers real results
+            </p>
+            <a
+              href="mailto:help@nyscdiary.com?subject=Custom Advertising Inquiry"
+              className="inline-block bg-accent-500 text-white px-8 py-4 rounded-xl font-display font-semibold hover:bg-accent-400 transition-all duration-200 shadow-lg shadow-accent-500/20 hover:shadow-xl hover:-translate-y-0.5"
+            >
+              Contact Our Team
+            </a>
+          </Reveal>
         </div>
       </section>
     </div>

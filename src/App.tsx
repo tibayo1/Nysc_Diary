@@ -28,7 +28,7 @@ function App() {
       case 'community':
         return <Community />;
       case 'about':
-        return <About />;
+        return <About onNavigate={setCurrentPage} />;
       default:
         return <Home onNavigate={setCurrentPage} />;
     }
