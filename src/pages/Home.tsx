@@ -299,7 +299,7 @@ export default function Home({ onNavigate }: HomeProps) {
                 onClick={() => onNavigate('community')}
                 className="bg-white text-nysc-700 px-8 py-4 rounded-xl font-display font-semibold hover:bg-nysc-50 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
               >
-                Join WhatsApp Group
+                Join Our Community
               </button>
               <button
                 onClick={() => onNavigate('community')}

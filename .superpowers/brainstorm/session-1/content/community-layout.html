@@ -1,0 +1,99 @@
+<h2>Community Page Layout — Which feels right?</h2>
+<p class="subtitle">Both use Firebase + tags + username-from-email. The difference is how threads are browsed.</p>
+
+<div class="cards">
+
+  <!-- Option A -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8fafc;padding:16px;font-family:sans-serif;font-size:13px;">
+      <!-- Mockup A -->
+      <div style="background:#1a6b3c;color:white;border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:16px;">📌</span>
+        <div>
+          <div style="font-weight:700;font-size:13px;">NYSC General Chat — Start here!</div>
+          <div style="font-size:11px;opacity:.8;">Pinned by NYSC Diary · 1.2k replies</div>
+        </div>
+      </div>
+      <!-- Tag filter bar -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="background:#e8f5e9;color:#1a6b3c;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;">All</span>
+        <span style="background:#f1f5f9;color:#64748b;border-radius:20px;padding:3px 10px;font-size:11px;">🏕️ Camp</span>
+        <span style="background:#f1f5f9;color:#64748b;border-radius:20px;padding:3px 10px;font-size:11px;">💸 Allowance</span>
+        <span style="background:#f1f5f9;color:#64748b;border-radius:20px;padding:3px 10px;font-size:11px;">💼 Jobs</span>
+        <span style="background:#f1f5f9;color:#64748b;border-radius:20px;padding:3px 10px;font-size:11px;">📣 Rant</span>
+      </div>
+      <!-- Thread cards -->
+      <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:8px;background:white;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-weight:600;font-size:12px;">Is Lagos allowance really ₦33k or more?</span>
+          <span style="background:#fef3c7;color:#92400e;border-radius:12px;padding:2px 8px;font-size:10px;">💸 Allowance</span>
+        </div>
+        <div style="color:#64748b;font-size:11px;">chioma_k · 3h ago · 14 replies</div>
+      </div>
+      <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;margin-bottom:8px;background:white;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-weight:600;font-size:12px;">Camp life in Borno — what to expect</span>
+          <span style="background:#d1fae5;color:#065f46;border-radius:12px;padding:2px 8px;font-size:10px;">🏕️ Camp</span>
+        </div>
+        <div style="color:#64748b;font-size:11px;">tunde_f · 6h ago · 8 replies</div>
+      </div>
+      <div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:white;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-weight:600;font-size:12px;">Tech internship for corps members in Abuja</span>
+          <span style="background:#dbeafe;color:#1e40af;border-radius:12px;padding:2px 8px;font-size:10px;">💼 Jobs</span>
+        </div>
+        <div style="color:#64748b;font-size:11px;">ada_o · 12h ago · 22 replies</div>
+      </div>
+      <div style="margin-top:10px;background:#f97316;color:white;border-radius:8px;padding:8px;text-align:center;font-weight:700;font-size:12px;">+ Start a Thread</div>
+    </div>
+    <div class="card-body">
+      <h3>A — Feed with Tag Filter Bar</h3>
+      <p>Tags sit as a horizontal scrollable filter above the feed. Click a tag to filter threads. Clean, mobile-friendly, feels like a modern forum.</p>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f8fafc;padding:16px;font-family:sans-serif;font-size:13px;">
+      <!-- Sidebar layout -->
+      <div style="display:grid;grid-template-columns:100px 1fr;gap:10px;">
+        <!-- Sidebar -->
+        <div>
+          <div style="font-weight:700;font-size:11px;color:#94a3b8;margin-bottom:8px;text-transform:uppercase;">Topics</div>
+          <div style="background:#1a6b3c;color:white;border-radius:6px;padding:5px 8px;font-size:11px;margin-bottom:4px;">All Posts</div>
+          <div style="color:#475569;padding:5px 8px;font-size:11px;margin-bottom:2px;">🏕️ Camp Life</div>
+          <div style="color:#475569;padding:5px 8px;font-size:11px;margin-bottom:2px;">🏢 PPA</div>
+          <div style="color:#475569;padding:5px 8px;font-size:11px;margin-bottom:2px;">💸 Allowance</div>
+          <div style="color:#475569;padding:5px 8px;font-size:11px;margin-bottom:2px;">💼 Jobs</div>
+          <div style="color:#475569;padding:5px 8px;font-size:11px;margin-bottom:2px;">📣 Rant</div>
+          <div style="color:#475569;padding:5px 8px;font-size:11px;">📖 Advice</div>
+        </div>
+        <!-- Feed -->
+        <div>
+          <div style="background:#1a6b3c;color:white;border-radius:8px;padding:8px 10px;margin-bottom:8px;">
+            <div style="font-weight:700;font-size:11px;">📌 NYSC General Chat</div>
+            <div style="font-size:10px;opacity:.8;">1.2k replies</div>
+          </div>
+          <div style="border:1px solid #e2e8f0;border-radius:6px;padding:8px;margin-bottom:6px;background:white;">
+            <div style="font-weight:600;font-size:11px;margin-bottom:3px;">Is Lagos allowance really ₦33k?</div>
+            <div style="color:#64748b;font-size:10px;">chioma_k · 3h · 14 replies</div>
+          </div>
+          <div style="border:1px solid #e2e8f0;border-radius:6px;padding:8px;margin-bottom:6px;background:white;">
+            <div style="font-weight:600;font-size:11px;margin-bottom:3px;">Camp life in Borno</div>
+            <div style="color:#64748b;font-size:10px;">tunde_f · 6h · 8 replies</div>
+          </div>
+          <div style="border:1px solid #e2e8f0;border-radius:6px;padding:8px;background:white;">
+            <div style="font-weight:600;font-size:11px;margin-bottom:3px;">Tech internship in Abuja 🔥</div>
+            <div style="color:#64748b;font-size:10px;">ada_o · 12h · 22 replies</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px;background:#f97316;color:white;border-radius:8px;padding:8px;text-align:center;font-weight:700;font-size:12px;">+ Start a Thread</div>
+    </div>
+    <div class="card-body">
+      <h3>B — Sidebar Tags + Feed</h3>
+      <p>Tags live in a left sidebar (like Nairaland's board list). Feed on the right. Works great on desktop, collapses to tabs on mobile.</p>
+    </div>
+  </div>
+
+</div>

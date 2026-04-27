@@ -1,7 +1,12 @@
-import { MessageCircle, Mail, Send, Users, FileText, Heart } from 'lucide-react';
+import { useState } from 'react';
+import { Mail, FileText, Heart, Users } from 'lucide-react';
 import { Reveal } from '../hooks/useScrollReveal';
+import ThreadFeed from '../components/community/ThreadFeed';
+import ThreadDetail from '../components/community/ThreadDetail';
 
 export default function Community() {
+  const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
@@ -13,9 +18,9 @@ export default function Community() {
             <Heart className="w-4 h-4 text-accent-400" aria-hidden="true" />
             <span className="text-sm font-display font-medium text-white/90">Be Part of Something Special</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">Join Our Community</h1>
+          <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">NYSC Community</h1>
           <p className="text-xl text-nysc-100 font-body max-w-2xl">
-            Connect with thousands of corps members across Nigeria
+            Connect, share and support fellow corps members across Nigeria
           </p>
           <p className="text-lg mt-2 font-display font-medium italic text-accent-300">
             "Creating a community of opportunities"
@@ -26,51 +31,45 @@ export default function Community() {
         </div>
       </section>
 
-      {/* Join Options */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* WhatsApp Group */}
-          <Reveal>
-            <div className="bg-white rounded-3xl shadow-sm p-8 md:p-10 border border-gray-100 card-hover h-full">
-              <div className="w-14 h-14 bg-gradient-to-br from-nysc-500 to-nysc-600 rounded-xl flex items-center justify-center mb-6 shadow-sm">
-                <MessageCircle className="h-7 w-7 text-white" aria-hidden="true" />
-              </div>
-              <h2 className="text-2xl font-display font-bold text-gray-900 mb-3">Join Our WhatsApp Group</h2>
-              <p className="text-gray-600 font-body mb-6 leading-relaxed">
-                Connect with fellow corps members, get instant updates, share experiences, and access exclusive opportunities in our active community.
-              </p>
-              <div className="space-y-3 mb-8">
-                {[
-                  { icon: Users, text: '5,000+ Active Members' },
-                  { icon: Send, text: 'Daily Updates & Opportunities' },
-                  { icon: MessageCircle, text: '24/7 Community Support' },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center text-sm font-body text-gray-600">
-                    <item.icon className="w-5 h-5 mr-3 text-nysc-600" aria-hidden="true" />
-                    {item.text}
-                  </div>
-                ))}
-              </div>
-              <a
-                href="https://chat.whatsapp.com/nyscdiary"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center bg-nysc-600 text-white py-3.5 rounded-xl font-display font-semibold hover:bg-nysc-500 transition-all duration-200 shadow-md shadow-nysc-600/20"
-              >
-                Join WhatsApp Group
-              </a>
+      {/* Community Threads */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Reveal>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-gradient-to-br from-nysc-500 to-nysc-700 rounded-xl flex items-center justify-center shadow-sm">
+              <Users className="h-5 w-5 text-white" aria-hidden="true" />
             </div>
-          </Reveal>
+            <div>
+              <h2 className="text-2xl font-display font-bold text-gray-900">
+                {selectedThreadId ? 'Thread Discussion' : 'Community Threads'}
+              </h2>
+              {!selectedThreadId && (
+                <p className="text-sm text-gray-500">Browse topics or start your own thread</p>
+              )}
+            </div>
+          </div>
 
-          {/* Newsletter */}
-          <Reveal delay={0.15}>
-            <div className="bg-white rounded-3xl shadow-sm p-8 md:p-10 border border-gray-100 card-hover h-full">
+          {selectedThreadId ? (
+            <ThreadDetail
+              threadId={selectedThreadId}
+              onBack={() => setSelectedThreadId(null)}
+            />
+          ) : (
+            <ThreadFeed onSelectThread={setSelectedThreadId} />
+          )}
+        </Reveal>
+      </section>
+
+      {/* Newsletter */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-2xl mx-auto">
+          <Reveal>
+            <div className="bg-white rounded-3xl shadow-sm p-8 md:p-10 border border-gray-100 card-hover">
               <div className="w-14 h-14 bg-gradient-to-br from-accent-400 to-accent-500 rounded-xl flex items-center justify-center mb-6 shadow-sm">
                 <Mail className="h-7 w-7 text-white" aria-hidden="true" />
               </div>
               <h2 className="text-2xl font-display font-bold text-gray-900 mb-3">Subscribe to Newsletter</h2>
               <p className="text-gray-600 font-body mb-6 leading-relaxed">
-                Get weekly updates, opportunities, and exclusive content delivered straight to your inbox. Never miss important NYSC information.
+                Get weekly updates, opportunities, and exclusive content delivered straight to your inbox.
               </p>
               <form
                 onSubmit={(e) => {
@@ -131,52 +130,23 @@ export default function Community() {
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="storyName" className="block text-sm font-display font-semibold text-gray-800 mb-1.5 text-left">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="storyName"
-                      name="storyName"
-                      placeholder="Your name…"
-                      required
-                      autoComplete="name"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl font-body text-sm focus:ring-2 focus:ring-nysc-500 focus:border-transparent transition-colors"
-                    />
+                    <label htmlFor="storyName" className="block text-sm font-display font-semibold text-gray-800 mb-1.5 text-left">Full Name</label>
+                    <input type="text" id="storyName" name="storyName" placeholder="Your name…" required autoComplete="name"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl font-body text-sm focus:ring-2 focus:ring-nysc-500 focus:border-transparent transition-colors" />
                   </div>
                   <div>
-                    <label htmlFor="storyEmail" className="block text-sm font-display font-semibold text-gray-800 mb-1.5 text-left">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="storyEmail"
-                      name="storyEmail"
-                      placeholder="your@email.com"
-                      required
-                      spellCheck={false}
-                      autoComplete="email"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl font-body text-sm focus:ring-2 focus:ring-nysc-500 focus:border-transparent transition-colors"
-                    />
+                    <label htmlFor="storyEmail" className="block text-sm font-display font-semibold text-gray-800 mb-1.5 text-left">Email Address</label>
+                    <input type="email" id="storyEmail" name="storyEmail" placeholder="your@email.com" required spellCheck={false} autoComplete="email"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-xl font-body text-sm focus:ring-2 focus:ring-nysc-500 focus:border-transparent transition-colors" />
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="storyContent" className="block text-sm font-display font-semibold text-gray-800 mb-1.5 text-left">
-                    Your Story
-                  </label>
-                  <textarea
-                    id="storyContent"
-                    name="storyContent"
-                    rows={5}
-                    placeholder="Share your NYSC journey…"
-                    required
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl font-body text-sm focus:ring-2 focus:ring-nysc-500 focus:border-transparent transition-colors resize-none"
-                  />
+                  <label htmlFor="storyContent" className="block text-sm font-display font-semibold text-gray-800 mb-1.5 text-left">Your Story</label>
+                  <textarea id="storyContent" name="storyContent" rows={5} placeholder="Share your NYSC journey…" required
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl font-body text-sm focus:ring-2 focus:ring-nysc-500 focus:border-transparent transition-colors resize-none" />
                 </div>
-                <button
-                  type="submit"
-                  className="bg-gradient-to-r from-nysc-600 to-nysc-500 text-white px-8 py-3.5 rounded-xl font-display font-semibold hover:from-nysc-500 hover:to-nysc-400 transition-all duration-200 shadow-md shadow-nysc-600/20"
-                >
+                <button type="submit"
+                  className="bg-gradient-to-r from-nysc-600 to-nysc-500 text-white px-8 py-3.5 rounded-xl font-display font-semibold hover:from-nysc-500 hover:to-nysc-400 transition-all duration-200 shadow-md shadow-nysc-600/20">
                   Submit Your Story
                 </button>
               </form>

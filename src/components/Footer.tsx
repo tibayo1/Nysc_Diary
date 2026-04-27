@@ -1,4 +1,4 @@
-import { Instagram, Mail, MessageCircle } from 'lucide-react';
+import { Instagram, Mail } from 'lucide-react';
 import Logo from './Logo';
 
 interface FooterProps {
@@ -39,15 +39,6 @@ export default function Footer({ onNavigate }: FooterProps) {
                 aria-label="Email NYSC Diary"
               >
                 <Mail className="w-5 h-5" aria-hidden="true" />
-              </a>
-              <a
-                href="https://chat.whatsapp.com/nyscdiary"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-nysc-600 hover:scale-110 transition-all duration-200"
-                aria-label="Join NYSC Diary WhatsApp group"
-              >
-                <MessageCircle className="w-5 h-5" aria-hidden="true" />
               </a>
             </div>
           </div>
