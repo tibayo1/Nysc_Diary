@@ -1,40 +1,12 @@
 import { ArrowRight, TrendingUp, Users, BookOpen, Sparkles, Star } from 'lucide-react';
-import { Post, Corper } from '../types';
+import { Corper } from '../types';
 import { Reveal } from '../hooks/useScrollReveal';
+import { latestPosts } from '../data/posts';
 
 interface HomeProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: string, postId?: string) => void;
 }
 
-const latestPosts: Post[] = [
-  {
-    id: '1',
-    title: 'Everything You Need to Know About NYSC Call-up Letter',
-    category: 'NYSC Updates',
-    excerpt: 'A comprehensive guide on how to print your call-up letter and what to expect…',
-    image: 'https://images.pexels.com/photos/6802042/pexels-photo-6802042.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-20',
-    readTime: '5 min read'
-  },
-  {
-    id: '2',
-    title: '10 Essential Items to Pack for NYSC Camp',
-    category: 'Camp Life',
-    excerpt: 'Don\'t make the mistake of going to camp unprepared. Here\'s everything you need…',
-    image: 'https://images.pexels.com/photos/2462015/pexels-photo-2462015.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-18',
-    readTime: '7 min read'
-  },
-  {
-    id: '3',
-    title: 'Top Side Hustles for Corps Members in 2024',
-    category: 'Opportunities',
-    excerpt: 'Make the most of your service year with these lucrative side hustle ideas…',
-    image: 'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-15',
-    readTime: '6 min read'
-  }
-];
 
 const featuredCorper: Corper = {
   id: '1',
@@ -163,7 +135,7 @@ export default function Home({ onNavigate }: HomeProps) {
               <Reveal key={post.id} delay={index * 0.1}>
                 <article
                   className="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer card-hover group"
-                  onClick={() => onNavigate('content')}
+                  onClick={() => onNavigate('post-detail', post.id)}
                 >
                   <div className="relative overflow-hidden">
                     <img

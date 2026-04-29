@@ -1,93 +1,9 @@
 import { useState } from 'react';
 import { Clock, Search } from 'lucide-react';
-import { Post } from '../types';
 import { Reveal } from '../hooks/useScrollReveal';
+import { allPosts } from '../data/posts';
 
 const categories = ['All', 'Camp Life', 'NYSC Updates', 'Opportunities', 'Stories'];
-
-const allPosts: Post[] = [
-  {
-    id: '1',
-    title: 'Everything You Need to Know About NYSC Call-up Letter',
-    category: 'NYSC Updates',
-    excerpt: 'A comprehensive guide on how to print your call-up letter, what documents you need, and common issues to avoid.',
-    image: 'https://images.pexels.com/photos/6802042/pexels-photo-6802042.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-20',
-    readTime: '5 min read'
-  },
-  {
-    id: '2',
-    title: '10 Essential Items to Pack for NYSC Camp',
-    category: 'Camp Life',
-    excerpt: 'Don\'t make the mistake of going to camp unprepared. Here\'s everything you need to make your camp experience comfortable.',
-    image: 'https://images.pexels.com/photos/2462015/pexels-photo-2462015.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-18',
-    readTime: '7 min read'
-  },
-  {
-    id: '3',
-    title: 'Top Side Hustles for Corps Members in 2024',
-    category: 'Opportunities',
-    excerpt: 'Make the most of your service year with these lucrative side hustle ideas that won\'t interfere with your PPA duties.',
-    image: 'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-15',
-    readTime: '6 min read'
-  },
-  {
-    id: '4',
-    title: 'How I Started a Business During NYSC',
-    category: 'Stories',
-    excerpt: 'One corper\'s journey from batch mate to successful entrepreneur, and how NYSC provided the perfect launching pad.',
-    image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-12',
-    readTime: '8 min read'
-  },
-  {
-    id: '5',
-    title: 'Navigating Your First Week at Camp',
-    category: 'Camp Life',
-    excerpt: 'Survival tips, what to expect, and how to make friends quickly during your first week in the orientation camp.',
-    image: 'https://images.pexels.com/photos/3184296/pexels-photo-3184296.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-10',
-    readTime: '5 min read'
-  },
-  {
-    id: '6',
-    title: 'NYSC Allowance Increase: What You Need to Know',
-    category: 'NYSC Updates',
-    excerpt: 'Breaking down the new allowance structure, when it takes effect, and how it affects current corps members.',
-    image: 'https://images.pexels.com/photos/6801648/pexels-photo-6801648.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-08',
-    readTime: '4 min read'
-  },
-  {
-    id: '7',
-    title: 'Remote Job Opportunities for Corps Members',
-    category: 'Opportunities',
-    excerpt: 'Discover legitimate remote work opportunities perfect for corps members looking to earn extra income online.',
-    image: 'https://images.pexels.com/photos/4050287/pexels-photo-4050287.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-05',
-    readTime: '6 min read'
-  },
-  {
-    id: '8',
-    title: 'My Most Memorable CDS Experience',
-    category: 'Stories',
-    excerpt: 'How community development service turned into a life-changing experience that shaped my career path.',
-    image: 'https://images.pexels.com/photos/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-03',
-    readTime: '7 min read'
-  },
-  {
-    id: '9',
-    title: 'Understanding PPA Posting and Redeployment',
-    category: 'NYSC Updates',
-    excerpt: 'Complete guide to PPA assignments, when and how to request redeployment, and what documents you need.',
-    image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-01',
-    readTime: '5 min read'
-  }
-];
 
 const categoryColors: Record<string, string> = {
   'Camp Life': 'bg-nysc-600',
@@ -96,7 +12,11 @@ const categoryColors: Record<string, string> = {
   'Stories': 'bg-accent-600',
 };
 
-export default function Content() {
+interface ContentProps {
+  onSelectPost: (postId: string) => void;
+}
+
+export default function Content({ onSelectPost }: ContentProps) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -158,7 +78,14 @@ export default function Content() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredPosts.map((post, index) => (
             <Reveal key={post.id} delay={index * 0.05}>
-              <article className="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer card-hover group border border-gray-100">
+              <article
+                className="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer card-hover group border border-gray-100"
+                onClick={() => onSelectPost(post.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && onSelectPost(post.id)}
+                aria-label={`Read: ${post.title}`}
+              >
                 <div className="relative overflow-hidden">
                   <img
                     src={post.image}

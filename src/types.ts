@@ -20,6 +20,12 @@ export interface Reply {
   createdAt: Timestamp;
 }
 
+export interface PostSection {
+  type: 'paragraph' | 'heading' | 'list' | 'tip';
+  text?: string;
+  items?: string[];
+}
+
 export interface Post {
   id: string;
   title: string;
@@ -28,6 +34,7 @@ export interface Post {
   image: string;
   date: string;
   readTime: string;
+  content?: PostSection[];
 }
 
 export interface Corper {
