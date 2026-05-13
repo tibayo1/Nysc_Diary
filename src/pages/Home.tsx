@@ -2,6 +2,7 @@ import { ArrowRight, TrendingUp, Users, BookOpen, Sparkles, Star } from 'lucide-
 import { Corper } from '../types';
 import { Reveal } from '../hooks/useScrollReveal';
 import { latestPosts } from '../data/posts';
+import Prism from '../components/Prism';
 
 interface HomeProps {
   onNavigate: (page: string, postId?: string) => void;
@@ -29,6 +30,21 @@ export default function Home({ onNavigate }: HomeProps) {
     <div className="min-h-screen">
       {/* ===== HERO SECTION ===== */}
       <section className="relative overflow-hidden bg-gradient-to-br from-nysc-700 via-nysc-600 to-nysc-800 text-white">
+        {/* Prism Background */}
+        <div className="absolute inset-0 z-0 opacity-80 mix-blend-screen pointer-events-none" aria-hidden="true">
+          <Prism
+            animationType="rotate"
+            timeScale={0.5}
+            height={3.5}
+            baseWidth={5.5}
+            scale={3.6}
+            hueShift={0}
+            colorFrequency={1}
+            noise={0}
+            glow={1}
+          />
+        </div>
+
         {/* Decorative floating circles */}
         <div className="deco-circle w-96 h-96 bg-nysc-500/20 -top-20 -left-20 animate-float" aria-hidden="true" />
         <div className="deco-circle w-72 h-72 bg-accent-500/10 top-10 right-[-5rem] animate-float-slow" aria-hidden="true" />
