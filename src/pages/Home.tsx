@@ -11,8 +11,8 @@ interface HomeProps {
 
 const featuredCorper: Corper = {
   id: '1',
-  name: 'Adaeze Okonkwo',
-  state: 'Lagos State',
+  name: 'Ayoade Adeyemi',
+  state: 'Ogun State',
   ppa: 'Ministry of Education',
   story: 'From starting a tech community in her LGA to impacting over 200 students, Adaeze is redefining service…',
   image: 'https://images.pexels.com/photos/3796810/pexels-photo-3796810.jpeg?auto=compress&cs=tinysrgb&w=800',
