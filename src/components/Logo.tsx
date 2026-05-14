@@ -16,7 +16,7 @@ export default function Logo({ size = 'md', variant = 'full', className = '' }: 
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       <img
-        src="/ndlogo-clr_final_copy.jpg"
+        src="/nysc-diary-logo.png"
         alt="NYSC Diary Logo"
         className={`${s.img} rounded-md object-contain`}
         width={size === 'sm' ? 32 : size === 'md' ? 40 : 56}
