@@ -23,6 +23,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
     { id: 'corper-of-the-week', label: 'Corper of the Week' },
     { id: 'advertise', label: 'Advertise' },
     { id: 'community', label: 'Community' },
+    { id: 'diarytalks', label: '✨ DiaryTalks' },
     { id: 'about', label: 'About' },
   ];
 

@@ -81,6 +81,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               {[
                 { id: 'content', label: 'Content' },
                 { id: 'corper-of-the-week', label: 'Corper of the Week' },
+                { id: 'diarytalks', label: '✨ DiaryTalks' },
                 { id: 'advertise', label: 'Advertise' },
                 { id: 'community', label: 'Community' },
               ].map((item) => (
