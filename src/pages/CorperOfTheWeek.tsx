@@ -5,6 +5,29 @@ import { Reveal } from '../hooks/useScrollReveal';
 const corpers: Corper[] = [
   {
     id: '1',
+    name: 'Afolagboye Solomon Irenitemi',
+    state: 'Kwara State',
+    ppa: 'Omu-Aran High School',
+    story: `Afolagboye Solomon Irenitemi's NYSC journey did not begin smoothly. After graduating in August 2024, he waited for months without seeing his call-up number. When his call-up letter finally came in July, he was posted to Kwara State.
+
+Even before camp, Solomon faced one of his first major challenges: a four-day registration struggle. But despite the rough beginning, he remained determined to complete his service year with purpose.
+
+Although he studied Quantity Surveying, Solomon was posted to Omu-Aran High School, where he served as an assistant Physics and trade subject teacher. For someone trained in a different field, teaching subjects such as animal husbandry was unexpected, but it became one of the surprisingly fulfilling parts of his service year.
+
+Like many corps members, Solomon had to deal with the realities of service: finding accommodation, commuting daily, and raising funds for his personal CDS project. However, his most memorable moments came from his CDS meetings and the support of his colleagues.
+
+As CDS President, Solomon found leadership easier because of the people around him. His colleagues rallied behind his project, which included the construction of two incinerators, provision of chairs, lockers, hand-wash stands, and a whiteboard.
+
+For Solomon, the service year became more than just fulfilling a national requirement. It became a journey of courage, leadership, impact, and gratitude.
+
+"I've learnt that fear avoided becomes our limit. I'm grateful my story inspired colleagues, students, and management. By God's grace and the wonderful people around me, the journey ended smoothly."
+
+Solomon's story reminds us that even when the journey starts roughly, it can still end with impact, growth, and purpose.`,
+    image: '/solomon-irenitemi.png',
+    date: '2026-07-17'
+  },
+  {
+    id: '2',
     name: 'Ayoade Adeyemi',
     state: 'Ogun State',
     ppa: 'Ministry of Education',
@@ -13,7 +36,7 @@ const corpers: Corper[] = [
     date: '2026-05-10'
   },
   {
-    id: '2',
+    id: '3',
     name: 'Chukwuemeka Nwosu',
     state: 'Enugu State',
     ppa: 'General Hospital Enugu',
@@ -22,7 +45,7 @@ const corpers: Corper[] = [
     date: '2024-03-13'
   },
   {
-    id: '3',
+    id: '4',
     name: 'Fatima Abubakar',
     state: 'Kano State',
     ppa: 'Community Secondary School',
@@ -31,7 +54,7 @@ const corpers: Corper[] = [
     date: '2024-03-06'
   },
   {
-    id: '4',
+    id: '5',
     name: 'Oluwaseun Adebayo',
     state: 'Oyo State',
     ppa: 'Ministry of Agriculture',
@@ -40,7 +63,7 @@ const corpers: Corper[] = [
     date: '2024-02-28'
   },
   {
-    id: '5',
+    id: '6',
     name: 'Blessing Eze',
     state: 'Rivers State',
     ppa: 'State Library Board',
@@ -49,7 +72,7 @@ const corpers: Corper[] = [
     date: '2024-02-21'
   },
   {
-    id: '6',
+    id: '7',
     name: 'Ibrahim Yusuf',
     state: 'Kaduna State',
     ppa: 'Ministry of Youth Development',

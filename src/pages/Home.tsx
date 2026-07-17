@@ -11,12 +11,12 @@ interface HomeProps {
 
 const featuredCorper: Corper = {
   id: '1',
-  name: 'Ayoade Adeyemi',
-  state: 'Ogun State',
-  ppa: 'Ministry of Education',
-  story: 'From starting a tech community in his LGA to impacting over 200 students, Ayoade is redefining what it means to serve during NYSC…',
-  image: 'https://images.pexels.com/photos/5325890/pexels-photo-5325890.jpeg?auto=compress&cs=tinysrgb&w=800',
-  date: '2024-03-20'
+  name: 'Afolagboye Solomon Irenitemi',
+  state: 'Kwara State',
+  ppa: 'Omu-Aran High School',
+  story: 'From a difficult registration process to creating impact in Kwara State, Solomon\'s NYSC journey is a reminder that fear only becomes a limit when we refuse to face it. As CDS President, he led the construction of incinerators, provided chairs, lockers, and more…',
+  image: '/solomon-irenitemi.png',
+  date: '2026-07-17'
 };
 
 const trendingTopics = [
