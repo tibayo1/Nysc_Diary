@@ -22,14 +22,17 @@ export default function ThreadFeed({ onSelectThread }: ThreadFeedProps) {
     setLoading(true);
     setError('');
     try {
-      const [pinned, feed] = await Promise.all([
-        getPinnedThread(),
-        getThreads(tag),
-      ]);
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('timeout')), 5000)
+      );
+      const [pinned, feed] = await Promise.race([
+        Promise.all([getPinnedThread(), getThreads(tag)]),
+        timeout.then(() => { throw new Error('timeout'); }),
+      ]) as [Thread | null, Thread[]];
       setPinnedThread(pinned);
       setThreads(feed);
     } catch {
-      setError('Failed to load threads. Please try again.');
+      setError('Could not connect to the community. Please try again later.');
     } finally {
       setLoading(false);
     }

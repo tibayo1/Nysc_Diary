@@ -14,8 +14,8 @@ const featuredCorper: Corper = {
   name: 'Ayoade Adeyemi',
   state: 'Ogun State',
   ppa: 'Ministry of Education',
-  story: 'From starting a tech community in her LGA to impacting over 200 students, Adaeze is redefining service…',
-  image: 'https://images.pexels.com/photos/3796810/pexels-photo-3796810.jpeg?auto=compress&cs=tinysrgb&w=800',
+  story: 'From starting a tech community in his LGA to impacting over 200 students, Ayoade is redefining what it means to serve during NYSC…',
+  image: 'https://images.pexels.com/photos/5325890/pexels-photo-5325890.jpeg?auto=compress&cs=tinysrgb&w=800',
   date: '2024-03-20'
 };
 
