@@ -15,7 +15,7 @@ const featuredCorper: Corper = {
   state: 'Kwara State',
   ppa: 'Omu-Aran High School',
   story: 'From a difficult registration process to creating impact in Kwara State, Solomon\'s NYSC journey is a reminder that fear only becomes a limit when we refuse to face it. As CDS President, he led the construction of incinerators, provided chairs, lockers, and more…',
-  image: '/solomon-irenitemi.png',
+  image: '/solomon-irenitemi.jpg',
   date: '2026-07-17'
 };
 

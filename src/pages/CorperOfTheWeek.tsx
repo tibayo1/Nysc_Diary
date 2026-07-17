@@ -23,7 +23,7 @@ For Solomon, the service year became more than just fulfilling a national requir
 "I've learnt that fear avoided becomes our limit. I'm grateful my story inspired colleagues, students, and management. By God's grace and the wonderful people around me, the journey ended smoothly."
 
 Solomon's story reminds us that even when the journey starts roughly, it can still end with impact, growth, and purpose.`,
-    image: '/solomon-irenitemi.png',
+    image: '/solomon-irenitemi.jpg',
     date: '2026-07-17'
   },
   {
