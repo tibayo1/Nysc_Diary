@@ -15,6 +15,16 @@ function App() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    const titles: Record<string, string> = {
+      'home': 'NYSC Diary — Creating a Community of Opportunities',
+      'content': 'Content Library | NYSC Diary',
+      'post-detail': 'Article | NYSC Diary',
+      'corper-of-the-week': 'Corper of the Week | NYSC Diary',
+      'advertise': 'Advertise With Us | NYSC Diary',
+      'community': 'Community Forum | NYSC Diary',
+      'about': 'About Us | NYSC Diary',
+    };
+    document.title = titles[currentPage] || titles['home'];
   }, [currentPage]);
 
   /** Navigate to a page. Pass a postId to open a specific article. */

@@ -33,9 +33,9 @@ const values = [
 ];
 
 const teamMembers = [
-  { role: 'Founder & Editor-in-Chief', bio: 'Passionate about bridging the information gap for prospective and serving corps members.' },
-  { role: 'Content Lead', bio: 'Curating the most relevant NYSC updates, opportunities, and stories from across Nigeria.' },
-  { role: 'Community Manager', bio: 'Growing and nurturing our 5,000+ member WhatsApp community with daily value.' },
+  { name: 'Ayoade Adeyemi', role: 'Founder & Editor-in-Chief', bio: 'Passionate about bridging the information gap for prospective and serving corps members across Nigeria.' },
+  { name: 'Adeola Omotayo', role: 'Content Lead', bio: 'Curating the most relevant NYSC updates, opportunities, and stories from across all 36 states and FCT.' },
+  { name: 'Chisom Nweke', role: 'Community Manager', bio: 'Growing and nurturing our 5,000+ member WhatsApp community with daily value and engagement.' },
 ];
 
 export default function About({ onNavigate }: AboutProps) {

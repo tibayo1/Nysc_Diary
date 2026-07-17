@@ -5,12 +5,12 @@ import { Reveal } from '../hooks/useScrollReveal';
 const corpers: Corper[] = [
   {
     id: '1',
-    name: 'Adaeze Okonkwo',
-    state: 'Lagos State',
+    name: 'Ayoade Adeyemi',
+    state: 'Ogun State',
     ppa: 'Ministry of Education',
-    story: 'From starting a tech community in her LGA to impacting over 200 students, Adaeze is redefining what it means to serve. She developed a free coding bootcamp for secondary school students in her community.',
-    image: 'https://images.pexels.com/photos/3796810/pexels-photo-3796810.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-20'
+    story: 'From starting a tech community in his LGA to impacting over 200 students, Ayoade is redefining what it means to serve during NYSC. He developed a free coding bootcamp for secondary school students in his community.',
+    image: 'https://images.pexels.com/photos/5325890/pexels-photo-5325890.jpeg?auto=compress&cs=tinysrgb&w=800',
+    date: '2026-05-10'
   },
   {
     id: '2',
