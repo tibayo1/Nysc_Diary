@@ -153,18 +153,14 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
         return updated;
       });
 
-      // Log unanswered questions anonymously
+      // Log unanswered questions anonymously — fire and forget, don't block UI
       if (response.status === 'insufficient') {
-        try {
-          await addDoc(collection(db, 'diarytalks_unanswered'), {
-            question: text,
-            predictedCategory: response.category || 'Unknown',
-            createdAt: serverTimestamp(),
-            reviewStatus: 'pending',
-          });
-        } catch {
-          // Silently fail
-        }
+        addDoc(collection(db, 'diarytalks_unanswered'), {
+          question: text,
+          predictedCategory: response.category || 'Unknown',
+          createdAt: serverTimestamp(),
+          reviewStatus: 'pending',
+        }).catch(() => { /* silently fail */ });
       }
     } catch {
       setError('Something went wrong. Please try again.');

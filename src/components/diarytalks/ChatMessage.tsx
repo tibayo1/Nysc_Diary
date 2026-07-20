@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Copy, Check, ThumbsUp, ThumbsDown, Flag, ChevronDown, ChevronUp } from 'lucide-react';
 import type { ChatMessage as ChatMessageType } from '../../types/diarytalks';
 import SourceCard from './SourceCard';
@@ -7,6 +7,35 @@ import DiaryTalksIcon from './DiaryTalksIcon';
 interface ChatMessageProps {
   message: ChatMessageType;
   onFeedback?: (messageId: string, rating: 'helpful' | 'not_helpful' | 'reported') => void;
+}
+
+/** Lightweight inline markdown: **bold**, *italic*, newlines → JSX */
+function renderMarkdown(text: string): React.ReactNode {
+  const lines = text.split('\n');
+  return lines.map((line, li) => {
+    // Split by **bold** and *italic*
+    const parts: React.ReactNode[] = [];
+    const regex = /\*\*(.+?)\*\*|\*(.+?)\*/g;
+    let last = 0;
+    let match;
+    let key = 0;
+    while ((match = regex.exec(line)) !== null) {
+      if (match.index > last) parts.push(line.slice(last, match.index));
+      if (match[1] !== undefined) {
+        parts.push(<strong key={key++} className="font-semibold text-gray-900">{match[1]}</strong>);
+      } else if (match[2] !== undefined) {
+        parts.push(<em key={key++}>{match[2]}</em>);
+      }
+      last = match.index + match[0].length;
+    }
+    if (last < line.length) parts.push(line.slice(last));
+    return (
+      <span key={li}>
+        {parts.length > 0 ? parts : line}
+        {li < lines.length - 1 && <br />}
+      </span>
+    );
+  });
 }
 
 export default function ChatMessage({ message, onFeedback }: ChatMessageProps) {
@@ -46,9 +75,9 @@ export default function ChatMessage({ message, onFeedback }: ChatMessageProps) {
       </div>
       <div className="flex-1 max-w-[85%] sm:max-w-[80%]">
         <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-md shadow-sm px-5 py-4">
-          {/* Answer text */}
-          <p className="font-body text-sm text-gray-800 leading-relaxed whitespace-pre-line">
-            {response?.answer || message.content}
+          {/* Answer text — with inline markdown rendering */}
+          <p className="font-body text-sm text-gray-800 leading-relaxed">
+            {renderMarkdown(response?.answer || message.content)}
           </p>
 
           {/* Next steps (collapsible) */}
