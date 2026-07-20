@@ -12,6 +12,7 @@ interface RequestBody {
   conversationId?: string;
   state?: string;
   languagePreference?: string;
+  history?: { role: 'user' | 'assistant'; content: string }[];
 }
 
 // Rate limiting via simple in-memory map (per-isolate, resets on cold start)
@@ -131,6 +132,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     // Call OpenAI
     const model = env.OPENAI_MODEL || 'gpt-4o-mini';
+    const history = (body.history || []).slice(-8); // last 8 turns for context
+
+    const messages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...history.map((h) => ({ role: h.role, content: h.content })),
+      { role: 'user', content: message },
+    ];
 
     const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -140,12 +148,9 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       },
       body: JSON.stringify({
         model,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: message },
-        ],
-        temperature: 0.3,
-        max_tokens: 1024,
+        messages,
+        temperature: 0.4,
+        max_tokens: 1200,
         response_format: { type: 'json_object' },
       }),
     });

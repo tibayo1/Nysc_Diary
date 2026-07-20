@@ -86,6 +86,7 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
     try {
       // Try server API first, fall back to local matching
       let response;
+      let usedLocalFallback = false;
       try {
         const res = await fetch('/api/diarytalk', {
           method: 'POST',
@@ -93,16 +94,37 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
           body: JSON.stringify({
             message: text,
             conversationId: activeConv.id,
+            history: activeConv.messages.slice(-6).map((m) => ({
+              role: m.role,
+              content: m.content,
+            })),
           }),
         });
         if (res.ok) {
-          response = await res.json();
+          const data = await res.json();
+          // Server signals it wants the client to use local matching
+          if (data.fallback) {
+            throw new Error('Server fallback');
+          }
+          response = data;
         } else {
           throw new Error('API unavailable');
         }
       } catch {
         // Fall back to local matching
         response = buildResponse(text);
+        usedLocalFallback = true;
+      }
+
+      // If local matching also has no answer, show a friendlier message
+      if (usedLocalFallback && response.status === 'insufficient') {
+        response = {
+          ...response,
+          answer:
+            'The AI assistant is currently unavailable (the OpenAI API key needs to be configured on the server). ' +
+            'For now, I can only answer questions from my built-in knowledge base.\n\n' +
+            'Try asking about: **camp requirements**, **call-up letters**, **PPA**, **relocation**, **monthly clearance**, **allowances**, or **exemption**.',
+        };
       }
 
       const assistantMsg: ChatMessage = {
@@ -142,6 +164,7 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleFeedback = async (messageId: string, rating: 'helpful' | 'not_helpful' | 'reported') => {
     // Update UI immediately
     setConversations((prev) => {
