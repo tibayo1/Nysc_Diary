@@ -60,8 +60,9 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
 
     setError('');
     setInput('');
+    setLoading(true);
 
-    // Add user message
+    // Add user message immediately
     const userMsg: ChatMessage = {
       id: generateId(),
       role: 'user',
@@ -78,12 +79,10 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
       return updated;
     });
 
-    setLoading(true);
-
-    // Simulate slight delay for natural feel
-    await new Promise((resolve) => setTimeout(resolve, 600 + Math.random() * 400));
-
     try {
+      // Brief delay for natural feel
+      await new Promise((resolve) => setTimeout(resolve, 600 + Math.random() * 400));
+
       // Try server API first, fall back to local matching
       let response;
       let usedLocalFallback = false;
@@ -102,28 +101,38 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
         });
         if (res.ok) {
           const data = await res.json();
-          // Server signals it wants the client to use local matching
-          if (data.fallback) {
-            throw new Error('Server fallback');
-          }
+          if (data.fallback) throw new Error('Server fallback');
           response = data;
         } else {
           throw new Error('API unavailable');
         }
       } catch {
-        // Fall back to local matching
         response = buildResponse(text);
         usedLocalFallback = true;
       }
 
-      // If local matching also has no answer, show a friendlier message
+      // Safety: make sure answer is always a string
+      if (!response || !response.answer) {
+        response = {
+          answer: 'Something went wrong getting an answer. Please try again.',
+          status: 'insufficient',
+          category: 'General',
+          informationType: 'insufficient',
+          sources: [],
+          requiresOfficialConfirmation: false,
+        };
+        usedLocalFallback = true;
+      }
+
+      // If local matching has no answer, show a helpful fallback message
       if (usedLocalFallback && response.status === 'insufficient') {
         response = {
           ...response,
           answer:
-            'The AI assistant is currently unavailable (the OpenAI API key needs to be configured on the server). ' +
-            'For now, I can only answer questions from my built-in knowledge base.\n\n' +
-            'Try asking about: **camp requirements**, **call-up letters**, **PPA**, **relocation**, **monthly clearance**, **allowances**, or **exemption**.',
+            'The AI assistant needs an OpenAI API key to answer this question fully. ' +
+            'Once it\'s configured, I\'ll be able to answer anything NYSC-related.\n\n' +
+            'For now I can help with: **camp requirements**, **call-up letters**, **PPA**, ' +
+            '**relocation**, **monthly clearance**, **allowances**, or **exemption**.',
         };
       }
 
@@ -154,15 +163,19 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
             reviewStatus: 'pending',
           });
         } catch {
-          // Silently fail — don't block the user experience
+          // Silently fail
         }
       }
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
+      // Always unlock the input — this runs no matter what
       setLoading(false);
+      // Re-focus so user can type immediately
+      setTimeout(() => inputRef.current?.focus(), 50);
     }
   };
+
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleFeedback = async (messageId: string, rating: 'helpful' | 'not_helpful' | 'reported') => {
