@@ -117,7 +117,23 @@ function scoreEntry(query: string, entry: KnowledgeEntry): number {
 
 // ─── Public API ──────────────────────────────────────────────────────────────
 
-const MATCH_THRESHOLD = 0.15;
+const MATCH_THRESHOLD = 0.28; // Raised: must be a confident match
+
+// Core NYSC topic keywords — if none present, question is off-topic
+const NYSC_KEYWORDS = [
+  'nysc', 'corps', 'corper', 'camp', 'ppa', 'cds', 'lga', 'lgi',
+  'call.?up', 'mobilization', 'mobilisation', 'posting', 'redeployment',
+  'relocation', 'clearance', 'allowance', 'allawee', 'senate.?list',
+  'orientation', 'service.?year', 'pass.?out', 'exemption', 'exclusion',
+  'primary.?place', 'assignment', 'batch', 'stream', 'portal', 'pcm',
+  'pregnant', 'nursing', 'married', 'leave', 'travel.?pass',
+  'food.?allowance', 'nhis', 'hazard', 'discharge', 'certificate',
+];
+
+function isNyscRelated(query: string): boolean {
+  const lower = query.toLowerCase();
+  return NYSC_KEYWORDS.some((kw) => new RegExp(kw).test(lower));
+}
 
 export function findBestMatch(query: string): ScoredEntry | null {
   if (!query || query.trim().length < 2) return null;
@@ -136,14 +152,30 @@ export function findBestMatch(query: string): ScoredEntry | null {
 }
 
 export function buildResponse(query: string): ChatResponse {
+  // First check: is this even an NYSC-related question?
+  if (!isNyscRelated(query)) {
+    return {
+      answer:
+        'I\'m DiaryTalks, an assistant specifically for NYSC-related questions. ' +
+        'I can\'t help with that particular question, but I\'m here to help with anything about your NYSC service year!\n\n' +
+        'Try asking about: **registration**, **camp**, **call-up letters**, **PPA**, **relocation**, **allowances**, **CDS**, or **clearance**.',
+      status: 'insufficient',
+      category: 'General',
+      informationType: 'insufficient',
+      sources: [],
+      requiresOfficialConfirmation: false,
+      suggestedFollowUp: 'What aspect of your NYSC service year can I help you with?',
+    };
+  }
+
   const match = findBestMatch(query);
 
   if (!match) {
     return {
       answer:
-        'I don\'t have enough verified information to answer this question reliably. ' +
-        'I recommend contacting your Local Government Inspector (LGI), your NYSC state secretariat, ' +
-        'or visiting the official NYSC website at nysc.gov.ng for accurate guidance.',
+        'I don\'t have enough verified information to answer that specific question reliably. ' +
+        'I recommend contacting your **Local Government Inspector (LGI)**, your **NYSC state secretariat**, ' +
+        'or visiting the official NYSC website at **nysc.gov.ng** for accurate guidance.',
       status: 'insufficient',
       category: 'General',
       informationType: 'insufficient',
