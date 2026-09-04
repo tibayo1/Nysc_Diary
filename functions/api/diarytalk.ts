@@ -31,22 +31,28 @@ function isRateLimited(ip: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
-// Sensitive info patterns
-const sensitivePatterns = [
-  /\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/,
-  /\b\d{10}\b/,
-  /password/i,
-  /\bpin\b/i,
-  /\bbvn\b/i,
-  /\bnin\b/i,
-  /bank\s*(account|details|number)/i,
-  /call[\s-]?up[\s-]?number/i,
-  /portal[\s-]?password/i,
-  /login[\s-]?(code|details|credentials)/i,
+// Sensitive-info rules — only trigger on actual value disclosure, not mere keyword mention
+const sensitiveRules: Array<{ pattern: RegExp; redact: string }> = [
+  { pattern: /\bBVN\b\s*(?:is|:|=|number\s*(?:is|:)|#)?\s*(\d{11})\b/gi,       redact: '[BVN redacted]' },
+  { pattern: /\bNIN\b\s*(?:is|:|=|number\s*(?:is|:)|#)?\s*(\d{11})\b/gi,       redact: '[NIN redacted]' },
+  { pattern: /\bNY\/\d{4}\/\d{2}\/\d{4,6}\b/gi,                                 redact: '[call-up number redacted]' },
+  { pattern: /\bpassword\s*(?:is|:|=)\s*\S+/gi,                                 redact: 'password [value redacted]' },
+  { pattern: /\b(?:account\s*(?:number|no\.?)\s*(?:is|:|=)?\s*)(\d{10})\b/gi,  redact: '[account number redacted]' },
+  { pattern: /\b(\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4})\b/g,                 redact: '[card number redacted]' },
 ];
 
-function containsSensitive(text: string): boolean {
-  return sensitivePatterns.some((p) => p.test(text));
+function redactSensitive(text: string): { redacted: string; found: boolean } {
+  let redacted = text;
+  let found = false;
+  for (const rule of sensitiveRules) {
+    rule.pattern.lastIndex = 0;
+    if (rule.pattern.test(text)) {
+      found = true;
+      rule.pattern.lastIndex = 0;
+      redacted = redacted.replace(rule.pattern, rule.redact);
+    }
+  }
+  return { redacted, found };
 }
 
 const SYSTEM_PROMPT = `You are DiaryTalks, a knowledgeable and friendly AI assistant for NYSC Diary (nyscdiary.com). You specialise exclusively in helping Nigerian corps members, prospective corps members, and their families navigate the National Youth Service Corps (NYSC) programme.
@@ -213,14 +219,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       );
     }
 
-    if (containsSensitive(message)) {
-      return new Response(
-        JSON.stringify({
-          error: 'Please do not share sensitive personal information such as passwords, bank details, or identification numbers.',
-        }),
-        { status: 400, headers: corsHeaders }
-      );
-    }
+    // Redact any sensitive values before passing to AI — don't block the question
+    const { redacted: safeMessage } = redactSensitive(message);
 
     // If OpenAI key is not set, return a signal for the client to use local matching
     if (!env.OPENAI_API_KEY) {
@@ -237,7 +237,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT },
       ...history.map((h) => ({ role: h.role, content: h.content })),
-      { role: 'user', content: message },
+      { role: 'user', content: safeMessage },
     ];
 
     const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
