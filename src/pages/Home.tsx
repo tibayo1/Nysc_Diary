@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import { ArrowRight, TrendingUp, Users, BookOpen, Sparkles, Star } from 'lucide-react';
 import { Corper } from '../types';
 import { Reveal } from '../hooks/useScrollReveal';
-import { latestPosts } from '../data/posts';
+import { getAllPosts, urlFor } from '../lib/sanity';
+import type { BlogPost } from '../types/blog';
 import Prism from '../components/Prism';
 
 interface HomeProps {
@@ -26,6 +28,12 @@ const trendingTopics = [
 ];
 
 export default function Home({ onNavigate }: HomeProps) {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    getAllPosts().then((posts) => setBlogPosts(posts.slice(0, 3))).catch(() => {});
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* ===== HERO SECTION ===== */}
@@ -89,10 +97,10 @@ export default function Home({ onNavigate }: HomeProps) {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up" style={{ animationDelay: '0.4s' }}>
               <button
-                onClick={() => onNavigate('content')}
+                onClick={() => onNavigate('blog')}
                 className="group bg-white text-nysc-700 px-8 py-4 rounded-xl font-display font-semibold hover:bg-nysc-50 transition-all duration-200 flex items-center justify-center shadow-lg shadow-black/10 hover:shadow-xl hover:-translate-y-0.5 btn-shine"
               >
-                Explore Content
+                Explore Blog
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </button>
               <button
@@ -127,7 +135,7 @@ export default function Home({ onNavigate }: HomeProps) {
         </div>
       </section>
 
-      {/* ===== LATEST POSTS ===== */}
+      {/* ===== LATEST POSTS (from Sanity) ===== */}
       <section className="bg-gray-50 pt-8 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal>
@@ -137,7 +145,7 @@ export default function Home({ onNavigate }: HomeProps) {
                 <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mt-1">Latest Posts</h2>
               </div>
               <button
-                onClick={() => onNavigate('content')}
+                onClick={() => onNavigate('blog')}
                 className="group text-nysc-600 font-display font-semibold hover:text-nysc-700 flex items-center gap-1 transition-colors"
               >
                 View All
@@ -146,41 +154,65 @@ export default function Home({ onNavigate }: HomeProps) {
             </div>
           </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {latestPosts.map((post, index) => (
-              <Reveal key={post.id} delay={index * 0.1}>
-                <article
-                  className="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer card-hover group"
-                  onClick={() => onNavigate('post-detail', post.id)}
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500"
-                      width={400}
-                      height={208}
-                      loading="lazy"
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-nysc-600 text-white px-3 py-1 rounded-full text-xs font-display font-semibold shadow-sm">
-                        {post.category}
-                      </span>
-                    </div>
+          {blogPosts.length === 0 ? (
+            // Skeleton while loading
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1,2,3].map((i) => (
+                <div key={i} className="bg-white rounded-2xl shadow-sm overflow-hidden animate-pulse">
+                  <div className="h-52 bg-gray-200" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-4 bg-gray-200 rounded-full w-3/4" />
+                    <div className="h-4 bg-gray-100 rounded-full" />
+                    <div className="h-4 bg-gray-100 rounded-full w-2/3" />
                   </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-body text-gray-500">{post.readTime}</span>
-                    </div>
-                    <h3 className="text-lg font-display font-bold text-gray-900 mb-2 group-hover:text-nysc-600 transition-colors line-clamp-2">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-600 font-body text-sm line-clamp-2">{post.excerpt}</p>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {blogPosts.map((post, index) => {
+                const coverUrl = post.coverImage
+                  ? urlFor(post.coverImage).width(600).url()
+                  : null;
+                return (
+                  <Reveal key={post._id} delay={index * 0.1}>
+                    <article
+                      className="bg-white rounded-2xl shadow-sm overflow-hidden cursor-pointer card-hover group border border-gray-100"
+                      onClick={() => onNavigate('blog-post', post.slug.current)}
+                    >
+                      <div className="relative overflow-hidden h-52">
+                        {coverUrl ? (
+                          <img
+                            src={coverUrl}
+                            alt={post.coverImage?.alt ?? post.title}
+                            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-nysc-50 to-nysc-100 flex items-center justify-center">
+                            <span className="text-4xl">📰</span>
+                          </div>
+                        )}
+                        <div className="absolute top-4 left-4">
+                          <span className="bg-nysc-600 text-white px-3 py-1 rounded-full text-xs font-display font-semibold shadow-sm">
+                            {post.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <h3 className="text-lg font-display font-bold text-gray-900 mb-2 group-hover:text-nysc-600 transition-colors line-clamp-2">
+                          {post.title}
+                        </h3>
+                        {post.excerpt && (
+                          <p className="text-gray-600 font-body text-sm line-clamp-2">{post.excerpt}</p>
+                        )}
+                      </div>
+                    </article>
+                  </Reveal>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
@@ -253,7 +285,7 @@ export default function Home({ onNavigate }: HomeProps) {
               <Reveal key={index} delay={index * 0.1}>
                 <div
                   className="bg-white rounded-2xl shadow-sm p-8 card-hover cursor-pointer group border border-gray-100"
-                  onClick={() => onNavigate('content')}
+                  onClick={() => onNavigate('blog')}
                 >
                   <div className={`w-14 h-14 bg-gradient-to-br ${topic.color} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
                     <topic.icon className="h-7 w-7 text-white" aria-hidden="true" />
