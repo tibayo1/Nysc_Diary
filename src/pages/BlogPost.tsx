@@ -138,7 +138,7 @@ export default function BlogPostPage({ slug, onBack, onNavigate }: BlogPostPageP
 
   const badgeClass = CATEGORY_COLORS[post.category] ?? 'bg-gray-100 text-gray-700';
   const coverUrl = post.coverImage
-    ? urlFor(post.coverImage).width(1200).height(520).fit('crop').url()
+    ? urlFor(post.coverImage).width(1200).height(520).fit('crop').crop('focalpoint').url()
     : null;
   const authorAvatarUrl = post.author?.avatar
     ? urlFor(post.author.avatar).width(48).height(48).fit('crop').url()
