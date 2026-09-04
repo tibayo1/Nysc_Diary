@@ -42,7 +42,7 @@ interface UnansweredRecord {
 }
 
 // Admin email check — in production, use Firebase Auth or Cloudflare Access
-const ADMIN_EMAIL = 'nyscdiary@gmail.com';
+const ADMIN_EMAIL = 'tibson1@gmail.com';
 
 export default function AdminDiaryTalks({ onBack }: AdminDiaryTalksProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
