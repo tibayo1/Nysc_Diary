@@ -34,8 +34,10 @@ const POST_FIELDS = `
 
 export async function getAllPosts(): Promise<BlogPost[]> {
   return sanityClient.fetch(
-    `*[_type == "post" && defined(publishedAt) && publishedAt <= now()]
-     | order(featured desc, publishedAt desc) {
+    // Show posts that are published in Sanity, regardless of whether
+    // publishedAt is filled in. Posts with a future publishedAt are hidden.
+    `*[_type == "post" && (!defined(publishedAt) || publishedAt <= now())]
+     | order(featured desc, publishedAt desc, _createdAt desc) {
        ${POST_FIELDS}
      }`
   );
@@ -57,8 +59,8 @@ export async function getRelatedPosts(
 ): Promise<BlogPost[]> {
   return sanityClient.fetch(
     `*[_type == "post" && category == $category && slug.current != $excludeSlug
-       && defined(publishedAt) && publishedAt <= now()]
-     | order(publishedAt desc)[0...3] {
+       && (!defined(publishedAt) || publishedAt <= now())]
+     | order(publishedAt desc, _createdAt desc)[0...3] {
        ${POST_FIELDS}
      }`,
     { category, excludeSlug }
