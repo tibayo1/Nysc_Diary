@@ -33,7 +33,7 @@ interface BlogCardProps {
 export default function BlogCard({ post, onSelect, featured }: BlogCardProps) {
   const badgeClass = CATEGORY_COLORS[post.category] ?? 'bg-gray-100 text-gray-700';
   const coverUrl = post.coverImage
-    ? urlFor(post.coverImage).width(featured ? 1200 : 600).height(featured ? 480 : 340).fit('crop').crop('focalpoint').url()
+    ? urlFor(post.coverImage).width(featured ? 1200 : 600).url()
     : null;
 
   return (
@@ -49,7 +49,7 @@ export default function BlogCard({ post, onSelect, featured }: BlogCardProps) {
           <img
             src={coverUrl}
             alt={post.coverImage?.alt ?? post.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-nysc-50 to-nysc-100">

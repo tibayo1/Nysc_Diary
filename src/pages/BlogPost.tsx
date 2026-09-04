@@ -137,8 +137,9 @@ export default function BlogPostPage({ slug, onBack, onNavigate }: BlogPostPageP
   }
 
   const badgeClass = CATEGORY_COLORS[post.category] ?? 'bg-gray-100 text-gray-700';
+  // Don't force a crop height — let the image display at its natural aspect ratio
   const coverUrl = post.coverImage
-    ? urlFor(post.coverImage).width(1200).height(520).fit('crop').crop('focalpoint').url()
+    ? urlFor(post.coverImage).width(1200).url()
     : null;
   const authorAvatarUrl = post.author?.avatar
     ? urlFor(post.author.avatar).width(48).height(48).fit('crop').url()
@@ -168,8 +169,12 @@ export default function BlogPostPage({ slug, onBack, onNavigate }: BlogPostPageP
         <article className="flex-1 min-w-0">
           {/* Cover image */}
           {coverUrl && (
-            <div className="relative w-full h-72 md:h-[420px] rounded-2xl overflow-hidden mb-8 mt-4">
-              <img src={coverUrl} alt={post.coverImage?.alt ?? post.title} className="w-full h-full object-cover" />
+            <div className="relative w-full rounded-2xl overflow-hidden mb-8 mt-4">
+              <img
+                src={coverUrl}
+                alt={post.coverImage?.alt ?? post.title}
+                className="w-full h-auto object-cover rounded-2xl"
+              />
             </div>
           )}
 
