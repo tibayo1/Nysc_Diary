@@ -13,11 +13,40 @@ import AdminDiaryTalks from './pages/AdminDiaryTalks';
 import BlogListing from './pages/BlogListing';
 import BlogPostPage from './pages/BlogPost';
 
-function App() {
-  const [currentPage, setCurrentPage] = useState('home');
-  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
-  const [selectedBlogSlug, setSelectedBlogSlug] = useState<string | null>(null);
+// ─── Hash-based routing helpers ─────────────────────────────────────────────
 
+const VALID_PAGES = [
+  'home', 'content', 'post-detail', 'corper-of-the-week',
+  'advertise', 'community', 'diarytalks', 'admin-diarytalks',
+  'about', 'blog', 'blog-post',
+];
+
+/** Parse window.location.hash into { page, id } */
+function parseHash(): { page: string; id: string | null } {
+  const raw = window.location.hash.replace(/^#/, ''); // e.g. "blog-post/my-slug"
+  const [page, id = null] = raw.split('/');
+  return { page: VALID_PAGES.includes(page) ? page : 'home', id };
+}
+
+/** Write page (and optional id/slug) to the URL hash */
+function pushHash(page: string, id?: string) {
+  const hash = id ? `#${page}/${id}` : `#${page}`;
+  window.history.pushState(null, '', hash);
+}
+
+// ─── Component ───────────────────────────────────────────────────────────────
+
+function App() {
+  const initial = parseHash();
+  const [currentPage, setCurrentPage] = useState(initial.page);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(
+    initial.page === 'post-detail' ? initial.id : null
+  );
+  const [selectedBlogSlug, setSelectedBlogSlug] = useState<string | null>(
+    initial.page === 'blog-post' ? initial.id : null
+  );
+
+  // Sync page title + scroll on navigation
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     const titles: Record<string, string> = {
@@ -36,12 +65,26 @@ function App() {
     document.title = titles[currentPage] || titles['home'];
   }, [currentPage]);
 
-  /** Navigate to a page. Pass a postId to open a specific article or blogSlug for blog posts. */
+  // Handle browser back / forward buttons
+  useEffect(() => {
+    const onPop = () => {
+      const { page, id } = parseHash();
+      if (page === 'blog-post' && id) setSelectedBlogSlug(id);
+      if (page === 'post-detail' && id) setSelectedPostId(id);
+      setCurrentPage(page);
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  /** Navigate to a page, updating the URL hash so refresh works. */
   const navigate = (page: string, idOrSlug?: string) => {
     if (page === 'blog-post' && idOrSlug) setSelectedBlogSlug(idOrSlug);
     else if (idOrSlug) setSelectedPostId(idOrSlug);
     setCurrentPage(page);
+    pushHash(page, idOrSlug);
   };
+
 
   const renderPage = () => {
     switch (currentPage) {
