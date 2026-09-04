@@ -4,7 +4,8 @@ import { Reveal } from '../hooks/useScrollReveal';
 import DiaryTalksIcon from '../components/diarytalks/DiaryTalksIcon';
 import ChatMessageComp from '../components/diarytalks/ChatMessage';
 import SuggestedQuestions from '../components/diarytalks/SuggestedQuestions';
-import { buildResponse, validateMessage } from '../lib/diarytalks';
+import { buildResponse, validateMessage, checkSensitiveInfo } from '../lib/diarytalks';
+
 import type { ChatMessage, DiaryTalksConversation } from '../types/diarytalks';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -62,7 +63,13 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
     setInput('');
     setLoading(true);
 
-    // Add user message immediately
+    // ── Sensitive info check: redact values before sending to AI ─────────────
+    const sensitiveCheck = checkSensitiveInfo(text);
+    // The text shown in the chat bubble is the original (unredacted) user text.
+    // The text sent to the AI has sensitive values replaced with placeholders.
+    const textForAI = sensitiveCheck.detected ? sensitiveCheck.redactedText : text;
+
+    // Add user message immediately (show original text in UI)
     const userMsg: ChatMessage = {
       id: generateId(),
       role: 'user',
@@ -91,7 +98,7 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            message: text,
+            message: textForAI,
             conversationId: activeConv.id,
             history: activeConv.messages.slice(-6).map((m) => ({
               role: m.role,
@@ -107,7 +114,7 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
           throw new Error('API unavailable');
         }
       } catch {
-        response = buildResponse(text);
+        response = buildResponse(textForAI);
         usedLocalFallback = true;
       }
 
@@ -133,6 +140,19 @@ export default function DiaryTalks({ onNavigate }: DiaryTalksProps) {
             'Once it\'s configured, I\'ll be able to answer anything NYSC-related.\n\n' +
             'For now I can help with: **camp requirements**, **call-up letters**, **PPA**, ' +
             '**relocation**, **monthly clearance**, **allowances**, or **exemption**.',
+        };
+      }
+
+      // If sensitive data was detected, append a privacy warning to the response
+      // so the existing ChatMessage warning UI displays it — but the question still gets answered.
+      if (sensitiveCheck.detected) {
+        const labels = sensitiveCheck.detectedLabels.join(', ');
+        response = {
+          ...response,
+          warnings: [
+            ...(response.warnings || []),
+            `⚠️ Your message appeared to contain sensitive information (${labels}). That value has been removed before sending to the AI. Never share real credentials in chat.`,
+          ],
         };
       }
 

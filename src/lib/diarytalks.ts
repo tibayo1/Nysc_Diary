@@ -210,21 +210,107 @@ export function buildResponse(query: string): ChatResponse {
 }
 
 // ─── Sensitive Information Detection ─────────────────────────────────────────
-const sensitivePatterns = [
-  /\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/,         // card numbers
-  /\b\d{10}\b/,                                            // 10-digit numbers (account/phone)
-  /password/i,
-  /\bpin\b/i,
-  /\bbvn\b/i,
-  /\bnin\b/i,
-  /bank\s*(account|details|number)/i,
-  /call[\s-]?up[\s-]?number/i,
-  /portal[\s-]?password/i,
-  /login[\s-]?(code|details|credentials)/i,
+//
+// Design goals:
+//   • Do NOT trigger on the mere mention of "BVN", "NIN", "password", etc.
+//   • Trigger (and redact) only when the user appears to provide an actual value.
+//   • Redact the sensitive value from the text before sending to AI so the
+//     surrounding NYSC question can still be answered.
+//   • NYSC call-up numbers follow the pattern: NY/YYYY/NN/NNNNN or similar.
+//
+// Each rule has:
+//   pattern  – regex to find the sensitive disclosure
+//   label    – human-readable name used in the warning
+//   redact   – replacement text (keeps the sentence readable for the AI)
+
+interface SensitiveRule {
+  pattern: RegExp;
+  label: string;
+  redact: string;
+}
+
+const SENSITIVE_RULES: SensitiveRule[] = [
+  // ── BVN: 11-digit number after explicit BVN keyword + linking word ──────────
+  // Matches: "my BVN is 12345678901", "BVN: 12345678901", "bvn=12345678901"
+  {
+    pattern: /\bBVN\b\s*(?:is|:|=|number\s*(?:is|:)|#)?\s*(\d{11})\b/i,
+    label: 'BVN',
+    redact: '[BVN redacted]',
+  },
+  // ── NIN: 11-digit number after explicit NIN keyword ──────────────────────────
+  {
+    pattern: /\bNIN\b\s*(?:is|:|=|number\s*(?:is|:)|#)?\s*(\d{11})\b/i,
+    label: 'NIN',
+    redact: '[NIN redacted]',
+  },
+  // ── NYSC call-up number pattern  NY/YYYY/NN/NNNNN  (e.g. NY/2024/08/32981) ─
+  {
+    pattern: /\bNY\/\d{4}\/\d{2}\/\d{4,6}\b/i,
+    label: 'call-up number',
+    redact: '[call-up number redacted]',
+  },
+  // ── Password disclosure: "my password is X", "password: X", "password=X" ────
+  // Only triggers when the password value is present after the keyword.
+  {
+    pattern: /\bpassword\s*(?:is|:|=)\s*\S+/i,
+    label: 'password',
+    redact: 'password [value redacted]',
+  },
+  // ── Bank account number: 10-digit number after explicit account context ──────
+  {
+    pattern: /\b(?:account\s*(?:number|no\.?)\s*(?:is|:|=)?\s*)(\d{10})\b/i,
+    label: 'bank account number',
+    redact: '[account number redacted]',
+  },
+  // ── 16-digit card number (groups of 4 separated by space/dash or run together)
+  {
+    pattern: /\b(\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4})\b/,
+    label: 'card number',
+    redact: '[card number redacted]',
+  },
 ];
 
+export interface SensitiveCheckResult {
+  /** True when at least one sensitive value was detected */
+  detected: boolean;
+  /** Message with sensitive values replaced by [X redacted] placeholders */
+  redactedText: string;
+  /** Human-readable labels of what was detected, e.g. ["BVN", "password"] */
+  detectedLabels: string[];
+}
+
+/**
+ * Inspect `text` for actual sensitive-value disclosures (not mere keyword mentions).
+ * Returns the detection result and a redacted copy of the text safe to send to the AI.
+ */
+export function checkSensitiveInfo(text: string): SensitiveCheckResult {
+  let redactedText = text;
+  const detectedLabels: string[] = [];
+
+  for (const rule of SENSITIVE_RULES) {
+    // Use a global copy of the pattern so we replace ALL occurrences
+    const globalPattern = new RegExp(rule.pattern.source, rule.pattern.flags.includes('g') ? rule.pattern.flags : rule.pattern.flags + 'g');
+    if (globalPattern.test(text)) {
+      detectedLabels.push(rule.label);
+      // Reset lastIndex after the test
+      globalPattern.lastIndex = 0;
+      redactedText = redactedText.replace(globalPattern, rule.redact);
+    }
+  }
+
+  return {
+    detected: detectedLabels.length > 0,
+    redactedText,
+    detectedLabels,
+  };
+}
+
+/**
+ * @deprecated Use checkSensitiveInfo() for redaction-based handling.
+ * Kept for backward-compat with any callers that only need a boolean.
+ */
 export function containsSensitiveInfo(text: string): boolean {
-  return sensitivePatterns.some((pattern) => pattern.test(text));
+  return checkSensitiveInfo(text).detected;
 }
 
 // ─── Input Validation ────────────────────────────────────────────────────────
@@ -238,13 +324,46 @@ export function validateMessage(message: string): { valid: boolean; error?: stri
   if (message.length > 1000) {
     return { valid: false, error: 'Your message is too long. Please keep it under 1000 characters.' };
   }
-  if (containsSensitiveInfo(message)) {
-    return {
-      valid: false,
-      error:
-        '⚠️ It looks like you may be sharing sensitive information. ' +
-        'Please do not share passwords, bank details, call-up numbers, BVN, NIN, or other personal credentials.',
-    };
-  }
+  // NOTE: We no longer block sensitive messages here.
+  // checkSensitiveInfo() is called in the send pipeline and redacts values before
+  // forwarding to the AI, while displaying a warning in the UI.
   return { valid: true };
 }
+
+// ─── Tests (run via: npx ts-node src/lib/diarytalks.ts) ──────────────────────
+// Uncomment to run manually:
+/*
+function runSensitiveTests() {
+  const cases: Array<{ input: string; expectDetected: boolean; label: string }> = [
+    // False positives — must NOT be detected
+    { input: 'Can a different signature on my BVN affect me in camp?', expectDetected: false, label: 'BVN mention (no value)' },
+    { input: 'Do I need my BVN for camp?', expectDetected: false, label: 'BVN question' },
+    { input: 'My NIN details are different from my NYSC details.', expectDetected: false, label: 'NIN mention (no value)' },
+    { input: 'How do I find my call-up number?', expectDetected: false, label: 'call-up question' },
+    { input: 'I forgot my NYSC portal password.', expectDetected: false, label: 'password mention (no value)' },
+    { input: 'What is the BVN policy for corps members?', expectDetected: false, label: 'BVN policy question' },
+    { input: 'My PIN is needed for what?', expectDetected: false, label: 'PIN mention (no value)' },
+
+    // True positives — MUST be detected and redacted
+    { input: 'My BVN is 12345678901', expectDetected: true, label: 'BVN with value' },
+    { input: 'My NIN: 12345678901', expectDetected: true, label: 'NIN with value (colon)' },
+    { input: 'My password is examplePassword123', expectDetected: true, label: 'password disclosure' },
+    { input: 'Call-up number NY/2024/08/32981', expectDetected: true, label: 'NYSC call-up number' },
+    { input: 'bvn=12345678901', expectDetected: true, label: 'BVN equals value' },
+    { input: 'My account number is 1234567890', expectDetected: true, label: 'account number' },
+    { input: 'Card: 1234 5678 9012 3456', expectDetected: true, label: 'card number' },
+  ];
+
+  let passed = 0;
+  for (const { input, expectDetected, label } of cases) {
+    const result = checkSensitiveInfo(input);
+    const ok = result.detected === expectDetected;
+    console.log(`${ok ? '✅' : '❌'} [${label}]`);
+    if (!ok) console.log(`   Input: "${input}"\n   Expected detected=${expectDetected}, got ${result.detected}`);
+    if (result.detected) console.log(`   Redacted: "${result.redactedText}"`);
+    if (ok) passed++;
+  }
+  console.log(`\n${passed}/${cases.length} tests passed`);
+}
+runSensitiveTests();
+*/
