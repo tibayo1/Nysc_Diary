@@ -19,6 +19,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
 
   const navItems = [
     { id: 'home', label: 'Home' },
+    { id: 'blog', label: '📰 Blog' },
     { id: 'content', label: 'Content' },
     { id: 'corper-of-the-week', label: 'Corper of the Week' },
     { id: 'advertise', label: 'Advertise' },

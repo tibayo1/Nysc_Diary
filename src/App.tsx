@@ -10,10 +10,13 @@ import Community from './pages/Community';
 import About from './pages/About';
 import DiaryTalksPage from './pages/DiaryTalks';
 import AdminDiaryTalks from './pages/AdminDiaryTalks';
+import BlogListing from './pages/BlogListing';
+import BlogPostPage from './pages/BlogPost';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+  const [selectedBlogSlug, setSelectedBlogSlug] = useState<string | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -27,13 +30,16 @@ function App() {
       'diarytalks': 'DiaryTalks – AI Answers for NYSC Questions | NYSC Diary',
       'admin-diarytalks': 'Admin Dashboard | DiaryTalks',
       'about': 'About Us | NYSC Diary',
+      'blog': 'Blog | NYSC Diary',
+      'blog-post': 'Article | NYSC Diary Blog',
     };
     document.title = titles[currentPage] || titles['home'];
   }, [currentPage]);
 
-  /** Navigate to a page. Pass a postId to open a specific article. */
-  const navigate = (page: string, postId?: string) => {
-    if (postId) setSelectedPostId(postId);
+  /** Navigate to a page. Pass a postId to open a specific article or blogSlug for blog posts. */
+  const navigate = (page: string, idOrSlug?: string) => {
+    if (page === 'blog-post' && idOrSlug) setSelectedBlogSlug(idOrSlug);
+    else if (idOrSlug) setSelectedPostId(idOrSlug);
     setCurrentPage(page);
   };
 
@@ -68,6 +74,22 @@ function App() {
         return <AdminDiaryTalks onBack={() => setCurrentPage('diarytalks')} />;
       case 'about':
         return <About onNavigate={navigate} />;
+      case 'blog':
+        return (
+          <BlogListing
+            onSelectPost={(slug) => navigate('blog-post', slug)}
+          />
+        );
+      case 'blog-post':
+        return selectedBlogSlug ? (
+          <BlogPostPage
+            slug={selectedBlogSlug}
+            onBack={() => setCurrentPage('blog')}
+            onNavigate={navigate}
+          />
+        ) : (
+          <BlogListing onSelectPost={(slug) => navigate('blog-post', slug)} />
+        );
       default:
         return <Home onNavigate={navigate} />;
     }

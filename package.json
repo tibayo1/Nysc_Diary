@@ -11,6 +11,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
+    "@portabletext/react": "^3.2.4",
+    "@sanity/client": "^8.5.0",
+    "@sanity/image-url": "^2.1.1",
     "@supabase/supabase-js": "^2.57.4",
     "firebase": "^12.12.1",
     "lucide-react": "^0.344.0",
