@@ -24,12 +24,31 @@ interface Props {
 
 export default function DiaryTalksChatWidget({ onOpenFull }: Props) {
   const [open, setOpen] = useState(false);
+  const [previewVisible, setPreviewVisible] = useState(false);
   const [messages, setMessages] = useState<Message[]>([GREETING]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [convId] = useState(generateId);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-show preview bubble after 3s — only once per session
+  useEffect(() => {
+    if (sessionStorage.getItem('dt_widget_seen')) return;
+    const show = setTimeout(() => setPreviewVisible(true), 3000);
+    const hide = setTimeout(() => setPreviewVisible(false), 13000); // auto-hide after 10s
+    return () => { clearTimeout(show); clearTimeout(hide); };
+  }, []);
+
+  const dismissPreview = () => {
+    setPreviewVisible(false);
+    sessionStorage.setItem('dt_widget_seen', '1');
+  };
+
+  const openChat = () => {
+    dismissPreview();
+    setOpen(true);
+  };
 
   // Scroll to bottom whenever messages change
   useEffect(() => {
@@ -107,9 +126,43 @@ export default function DiaryTalksChatWidget({ onOpenFull }: Props) {
 
   return (
     <>
+      {/* ── Preview bubble (auto-appears after 3s) ── */}
+      <div
+        className={`fixed bottom-24 right-6 z-50 transition-all duration-500 ${
+          previewVisible && !open
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
+      >
+        <div
+          className="bg-white rounded-2xl rounded-br-sm shadow-xl border border-gray-100 px-4 py-3 max-w-[240px] cursor-pointer"
+          onClick={openChat}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); dismissPreview(); }}
+            className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-gray-400 text-white text-xs flex items-center justify-center hover:bg-gray-600 transition-colors"
+            aria-label="Dismiss"
+          >
+            <X className="w-3 h-3" />
+          </button>
+          <div className="flex items-center gap-2 mb-1.5">
+            <div className="w-6 h-6 rounded-full bg-nysc-100 flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-3 h-3 text-nysc-600" />
+            </div>
+            <p className="text-xs font-semibold text-gray-700">DiaryTalks AI</p>
+          </div>
+          <p className="text-sm text-gray-700 leading-snug">
+            👋 Have an NYSC question? Ask me anything!
+          </p>
+          <p className="text-xs text-nysc-600 font-medium mt-1.5">Click to chat →</p>
+        </div>
+        {/* little triangle pointing down to the button */}
+        <div className="w-3 h-3 bg-white border-r border-b border-gray-100 rotate-45 ml-auto mr-5 -mt-1.5 shadow-sm" />
+      </div>
+
       {/* ── Floating button ── */}
       <button
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => { dismissPreview(); setOpen((o) => !o); }}
         aria-label="Open DiaryTalks AI chat"
         className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all duration-300 ${
           open
