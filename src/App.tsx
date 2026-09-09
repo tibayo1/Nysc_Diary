@@ -12,6 +12,7 @@ import DiaryTalksPage from './pages/DiaryTalks';
 import AdminDiaryTalks from './pages/AdminDiaryTalks';
 import BlogListing from './pages/BlogListing';
 import BlogPostPage from './pages/BlogPost';
+import DiaryTalksChatWidget from './components/diarytalks/DiaryTalksChatWidget';
 
 // ─── Hash-based routing helpers ─────────────────────────────────────────────
 
@@ -146,6 +147,10 @@ function App() {
       {!isFullscreenPage && <Header currentPage={currentPage} onNavigate={navigate} />}
       <main>{renderPage()}</main>
       {!isFullscreenPage && <Footer onNavigate={navigate} />}
+      {/* Floating DiaryTalks widget — hidden on DiaryTalks pages to avoid duplication */}
+      {!isFullscreenPage && (
+        <DiaryTalksChatWidget onOpenFull={() => navigate('diarytalks')} />
+      )}
     </div>
   );
 }
