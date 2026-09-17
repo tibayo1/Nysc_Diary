@@ -30,7 +30,11 @@ export default function BlogListing({ onSelectPost }: BlogListingProps) {
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    return rest.filter((p) => {
+    // When a category or search is active, include ALL posts (even featured)
+    // so featured posts aren't invisible under their own category filter.
+    // The featured banner only shows for the unfiltered "All" view.
+    const pool = activeCategory === 'All' && !q ? rest : posts;
+    return pool.filter((p) => {
       const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
       const matchesSearch =
         !q ||
@@ -39,7 +43,7 @@ export default function BlogListing({ onSelectPost }: BlogListingProps) {
         (p.tags ?? []).some((t) => t.toLowerCase().includes(q));
       return matchesCategory && matchesSearch;
     });
-  }, [rest, search, activeCategory]);
+  }, [posts, rest, search, activeCategory]);
 
   return (
     <div className="min-h-screen bg-gray-50">
