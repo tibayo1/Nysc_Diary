@@ -120,7 +120,7 @@ export default function Footer({ onNavigate }: FooterProps) {
 
             {/* WhatsApp CTA */}
             <a
-              href="https://chat.whatsapp.com/nyscdiary"
+              href="https://chat.whatsapp.com/BxDlKAwHryO8APqhJDlSwR"
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-4 py-2.5 rounded-xl text-sm font-display font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-green-600/20 w-fit"

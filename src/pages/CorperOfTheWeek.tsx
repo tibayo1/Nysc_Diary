@@ -1,4 +1,6 @@
-import { MapPin, Briefcase, Calendar, Star } from 'lucide-react';
+import { MapPin, Briefcase, Calendar, Star, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
 import { Corper } from '../types';
 import { Reveal } from '../hooks/useScrollReveal';
 
@@ -28,7 +30,40 @@ Solomon's story reminds us that even when the journey starts roughly, it can sti
   },
 ];
 
+// ─── EmailJS config ──────────────────────────────────────────────────────────
+// Sign up free at https://www.emailjs.com → create a Service + Template,
+// then add these three IDs to your .env.local:
+//   VITE_EMAILJS_SERVICE_ID=service_xxxxxxx
+//   VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
+//   VITE_EMAILJS_PUBLIC_KEY=your_public_key
+const EMAILJS_SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID  as string;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
+const EMAILJS_PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY  as string;
+
 export default function CorperOfTheWeek() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('sending');
+    setErrorMsg('');
+    try {
+      await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current!,
+        EMAILJS_PUBLIC_KEY
+      );
+      setStatus('success');
+      formRef.current?.reset();
+    } catch (err: unknown) {
+      setStatus('error');
+      setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
@@ -91,24 +126,163 @@ export default function CorperOfTheWeek() {
         </Reveal>
       </section>
 
-      {/* CTA */}
+      {/* Nomination Form */}
       <section className="relative overflow-hidden bg-gradient-to-br from-nysc-700 via-nysc-600 to-nysc-800 text-white py-20">
         <div className="deco-circle w-48 h-48 bg-accent-500/10 top-0 right-20 animate-float-slow" aria-hidden="true" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div className="deco-circle w-32 h-32 bg-white/5 bottom-10 left-10 animate-float" aria-hidden="true" />
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <Reveal>
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Know an Amazing Corper?</h2>
-            <p className="text-xl mb-8 text-nysc-100 font-body">
-              Nominate them to be featured as Corper of the Week
-            </p>
-            <a
-              href="mailto:help@nyscdiary.com?subject=Corper of the Week Nomination"
-              className="inline-block bg-accent-500 text-white px-8 py-4 rounded-xl font-display font-semibold hover:bg-accent-400 transition-all duration-200 shadow-lg shadow-accent-500/20 hover:shadow-xl hover:-translate-y-0.5"
-            >
-              Submit Nomination
-            </a>
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Know an Amazing Corper?</h2>
+              <p className="text-xl text-nysc-100 font-body">
+                Fill the form below — your nomination goes straight to our inbox!
+              </p>
+            </div>
+
+            {status === 'success' ? (
+              <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-10 text-center">
+                <CheckCircle className="w-16 h-16 text-green-300 mx-auto mb-4" />
+                <h3 className="text-2xl font-display font-bold mb-2">Nomination Sent! 🎉</h3>
+                <p className="text-nysc-100 font-body mb-6">
+                  Thanks! We'll review it and get back to you via email shortly.
+                </p>
+                <button
+                  onClick={() => setStatus('idle')}
+                  className="bg-accent-500 hover:bg-accent-400 text-white px-6 py-3 rounded-xl font-display font-semibold transition-all duration-200"
+                >
+                  Submit Another Nomination
+                </button>
+              </div>
+            ) : (
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit}
+                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 space-y-5"
+                noValidate
+              >
+                {/* Hidden field — EmailJS template variable for recipient */}
+                <input type="hidden" name="to_email" value="help@nyscdiary.com" />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="nominee_name" className="block text-sm font-display font-semibold mb-1.5 text-white/90">
+                      Nominee's Full Name <span className="text-accent-300">*</span>
+                    </label>
+                    <input
+                      id="nominee_name"
+                      name="nominee_name"
+                      type="text"
+                      required
+                      placeholder="e.g. Amaka Okonkwo"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="nominee_state" className="block text-sm font-display font-semibold mb-1.5 text-white/90">
+                      State of Deployment <span className="text-accent-300">*</span>
+                    </label>
+                    <input
+                      id="nominee_state"
+                      name="nominee_state"
+                      type="text"
+                      required
+                      placeholder="e.g. Lagos State"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="nominee_ppa" className="block text-sm font-display font-semibold mb-1.5 text-white/90">
+                    Place of Primary Assignment (PPA) <span className="text-accent-300">*</span>
+                  </label>
+                  <input
+                    id="nominee_ppa"
+                    name="nominee_ppa"
+                    type="text"
+                    required
+                    placeholder="e.g. Ministry of Education, Ikeja"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="nominee_story" className="block text-sm font-display font-semibold mb-1.5 text-white/90">
+                    Why do they deserve this? <span className="text-accent-300">*</span>
+                  </label>
+                  <textarea
+                    id="nominee_story"
+                    name="nominee_story"
+                    required
+                    rows={5}
+                    placeholder="Tell us about their impact, projects, challenges overcome, or why they stand out…"
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition text-sm resize-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="nominator_name" className="block text-sm font-display font-semibold mb-1.5 text-white/90">
+                      Your Name <span className="text-accent-300">*</span>
+                    </label>
+                    <input
+                      id="nominator_name"
+                      name="nominator_name"
+                      type="text"
+                      required
+                      placeholder="Your full name"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="nominator_email" className="block text-sm font-display font-semibold mb-1.5 text-white/90">
+                      Your Email <span className="text-accent-300">*</span>
+                    </label>
+                    <input
+                      id="nominator_email"
+                      name="nominator_email"
+                      type="email"
+                      required
+                      placeholder="you@email.com"
+                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent-400 focus:border-transparent transition text-sm"
+                    />
+                  </div>
+                </div>
+
+                {status === 'error' && (
+                  <div className="flex items-center gap-2 bg-red-500/20 border border-red-400/30 rounded-xl px-4 py-3 text-sm text-red-200">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    {errorMsg || 'Failed to send. Please try again or email us directly at help@nyscdiary.com'}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={status === 'sending'}
+                  className="w-full flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-400 disabled:opacity-60 disabled:cursor-not-allowed text-white px-8 py-4 rounded-xl font-display font-semibold transition-all duration-200 shadow-lg shadow-accent-500/20 hover:shadow-xl hover:-translate-y-0.5"
+                >
+                  {status === 'sending' ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Sending…
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Submit Nomination
+                    </>
+                  )}
+                </button>
+
+                <p className="text-center text-xs text-white/50 font-body">
+                  Your nomination goes directly to <span className="text-white/70">help@nyscdiary.com</span>
+                </p>
+              </form>
+            )}
           </Reveal>
         </div>
       </section>
     </div>
   );
 }
+
