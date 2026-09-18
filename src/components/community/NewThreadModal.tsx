@@ -32,12 +32,18 @@ export default function NewThreadModal({ onClose, onSuccess }: NewThreadModalPro
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setLoading(true);
     try {
-      const id = await createThread({
-        title: form.title.trim(),
-        body: form.body.trim(),
-        tag: form.tag,
-        authorEmail: form.email.trim().toLowerCase(),
-      });
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out — check Firestore rules allow writes')), 10000)
+      );
+      const id = await Promise.race([
+        createThread({
+          title: form.title.trim(),
+          body: form.body.trim(),
+          tag: form.tag,
+          authorEmail: form.email.trim().toLowerCase(),
+        }),
+        timeout,
+      ]);
       const newThread: Thread = {
         id,
         title: form.title.trim(),
@@ -50,8 +56,9 @@ export default function NewThreadModal({ onClose, onSuccess }: NewThreadModalPro
         pinned: false,
       };
       onSuccess(newThread);
-    } catch {
-      setErrors({ submit: 'Something went wrong. Please try again.' });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      setErrors({ submit: msg });
     } finally {
       setLoading(false);
     }
