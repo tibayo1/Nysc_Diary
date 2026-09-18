@@ -23,7 +23,7 @@ export default function ThreadFeed({ onSelectThread }: ThreadFeedProps) {
     setError('');
     try {
       const timeout = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('timeout')), 5000)
+        setTimeout(() => reject(new Error('timeout')), 15000)
       );
       const [pinned, feed] = await Promise.race([
         Promise.all([getPinnedThread(), getThreads(tag)]),
@@ -31,8 +31,9 @@ export default function ThreadFeed({ onSelectThread }: ThreadFeedProps) {
       ]) as [Thread | null, Thread[]];
       setPinnedThread(pinned);
       setThreads(feed);
-    } catch {
-      setError('Could not connect to the community. Please try again later.');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(`Connection failed: ${msg}`);
     } finally {
       setLoading(false);
     }
