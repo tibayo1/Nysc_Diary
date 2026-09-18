@@ -26,60 +26,6 @@ Solomon's story reminds us that even when the journey starts roughly, it can sti
     image: '/solomon-irenitemi.jpg',
     date: '2026-07-17'
   },
-  {
-    id: '2',
-    name: 'Ayoade Adeyemi',
-    state: 'Ogun State',
-    ppa: 'Ministry of Education',
-    story: 'From starting a tech community in his LGA to impacting over 200 students, Ayoade is redefining what it means to serve during NYSC. He developed a free coding bootcamp for secondary school students in his community.',
-    image: 'https://images.pexels.com/photos/5325890/pexels-photo-5325890.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2026-05-10'
-  },
-  {
-    id: '3',
-    name: 'Chukwuemeka Nwosu',
-    state: 'Enugu State',
-    ppa: 'General Hospital Enugu',
-    story: 'As a medical doctor serving in rural Enugu, Chukwuemeka initiated a free medical outreach program that has served over 500 community members. His dedication to healthcare delivery in underserved areas is truly inspiring.',
-    image: 'https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-13'
-  },
-  {
-    id: '4',
-    name: 'Fatima Abubakar',
-    state: 'Kano State',
-    ppa: 'Community Secondary School',
-    story: 'Fatima transformed her PPA by introducing a girls-in-STEM program that has enrolled over 150 female students. Her passion for bridging the gender gap in technology is making real impact.',
-    image: 'https://images.pexels.com/photos/3768894/pexels-photo-3768894.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-03-06'
-  },
-  {
-    id: '5',
-    name: 'Oluwaseun Adebayo',
-    state: 'Oyo State',
-    ppa: 'Ministry of Agriculture',
-    story: 'Oluwaseun established a youth farming cooperative that has trained 80 young farmers in modern agricultural practices. His initiative has created sustainable income opportunities for youth in his community.',
-    image: 'https://images.pexels.com/photos/5384445/pexels-photo-5384445.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-02-28'
-  },
-  {
-    id: '6',
-    name: 'Blessing Eze',
-    state: 'Rivers State',
-    ppa: 'State Library Board',
-    story: 'Blessing started a mobile library service that brings books to children in remote riverine communities. Her innovation has improved literacy rates and sparked a love for reading in hundreds of children.',
-    image: 'https://images.pexels.com/photos/3783520/pexels-photo-3783520.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-02-21'
-  },
-  {
-    id: '7',
-    name: 'Ibrahim Yusuf',
-    state: 'Kaduna State',
-    ppa: 'Ministry of Youth Development',
-    story: 'Ibrahim created a skills acquisition center that has trained over 300 youths in various vocational skills including tailoring, carpentry, and digital marketing, helping reduce unemployment in his community.',
-    image: 'https://images.pexels.com/photos/5325890/pexels-photo-5325890.jpeg?auto=compress&cs=tinysrgb&w=800',
-    date: '2024-02-14'
-  }
 ];
 
 export default function CorperOfTheWeek() {
@@ -143,51 +89,6 @@ export default function CorperOfTheWeek() {
             </div>
           </div>
         </Reveal>
-
-        {/* Previous Corpers */}
-        <Reveal delay={0.2}>
-          <h2 className="text-3xl font-display font-bold text-gray-900 mt-16 mb-8">Previous Featured Corpers</h2>
-        </Reveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {corpers.slice(1).map((corper, index) => (
-            <Reveal key={corper.id} delay={index * 0.1}>
-              <div className="bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-100 group">
-                <div className="relative overflow-hidden">
-                  <img
-                    src={corper.image}
-                    alt={corper.name}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                    width={400}
-                    height={256}
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-display font-bold text-gray-900 mb-3">
-                    {corper.name}
-                  </h3>
-                  <div className="flex flex-col gap-2 mb-4 text-sm text-gray-600 font-body">
-                    <div className="flex items-center">
-                      <MapPin className="w-4 h-4 mr-2 text-nysc-600" aria-hidden="true" />
-                      {corper.state}
-                    </div>
-                    <div className="flex items-center">
-                      <Briefcase className="w-4 h-4 mr-2 text-accent-500" aria-hidden="true" />
-                      {corper.ppa}
-                    </div>
-                  </div>
-                  <p className="text-gray-700 font-body text-sm line-clamp-3">{corper.story}</p>
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <span className="text-xs text-gray-400 font-body">
-                      Featured: {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(corper.date))}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
       </section>
 
       {/* CTA */}
