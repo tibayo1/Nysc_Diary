@@ -32,9 +32,25 @@ interface BlogCardProps {
 
 export default function BlogCard({ post, onSelect, featured }: BlogCardProps) {
   const badgeClass = CATEGORY_COLORS[post.category] ?? 'bg-gray-100 text-gray-700';
-  const coverUrl = post.coverImage
-    ? urlFor(post.coverImage).width(featured ? 1200 : 600).url()
-    : null;
+
+  // urlFor can throw if coverImage.asset is missing (e.g. still uploading in Sanity)
+  let coverUrl: string | null = null;
+  try {
+    coverUrl = post.coverImage?.asset
+      ? urlFor(post.coverImage).width(featured ? 1200 : 600).url()
+      : null;
+  } catch {
+    coverUrl = null;
+  }
+
+  let authorAvatarUrl: string | null = null;
+  try {
+    authorAvatarUrl = post.author?.avatar?.asset
+      ? urlFor(post.author.avatar).width(32).height(32).fit('crop').url()
+      : null;
+  } catch {
+    authorAvatarUrl = null;
+  }
 
   return (
     <article
@@ -77,10 +93,10 @@ export default function BlogCard({ post, onSelect, featured }: BlogCardProps) {
 
         <div className="mt-auto flex items-center gap-3">
           {/* Author avatar */}
-          {post.author?.avatar ? (
+          {authorAvatarUrl ? (
             <img
-              src={urlFor(post.author.avatar).width(32).height(32).fit('crop').url()}
-              alt={post.author.name}
+              src={authorAvatarUrl}
+              alt={post.author?.name ?? ''}
               className="w-8 h-8 rounded-full object-cover flex-shrink-0"
             />
           ) : (
