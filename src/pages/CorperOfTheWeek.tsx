@@ -48,7 +48,11 @@ const EMAILJS_SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID  as string;
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
 const EMAILJS_PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY  as string;
 
-export default function CorperOfTheWeek() {
+interface CorperOfTheWeekProps {
+  onNavigate: (page: string, id?: string) => void;
+}
+
+export default function CorperOfTheWeek({ onNavigate }: CorperOfTheWeekProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
@@ -137,15 +141,14 @@ export default function CorperOfTheWeek() {
               </div>
 
               {/* Link to full blog post */}
-              <a
-                href="#blog-post/corper-of-the-week-oluwasegun-oyewale-project-inspire-ikorodu"
-                onClick={(e) => { e.preventDefault(); window.location.hash = 'blog-post/corper-of-the-week-oluwasegun-oyewale-project-inspire-ikorodu'; }}
+              <button
+                onClick={() => onNavigate('blog-post', 'corper-of-the-week-oluwasegun-oyewale-project-inspire-ikorodu')}
                 className="inline-flex items-center gap-2 bg-nysc-600 hover:bg-nysc-700 text-white px-5 py-2.5 rounded-xl font-display font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 <BookOpen className="w-4 h-4" aria-hidden="true" />
                 Read Full Story
                 <ExternalLink className="w-3.5 h-3.5 opacity-70" aria-hidden="true" />
-              </a>
+              </button>
             </div>
           </div>
         </Reveal>

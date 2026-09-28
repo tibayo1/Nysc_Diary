@@ -108,7 +108,7 @@ function App() {
           <Content onSelectPost={(id) => navigate('post-detail', id)} />
         );
       case 'corper-of-the-week':
-        return <CorperOfTheWeek />;
+        return <CorperOfTheWeek onNavigate={navigate} />;
       case 'advertise':
         return <Advertise />;
       case 'community':
