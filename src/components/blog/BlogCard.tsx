@@ -38,7 +38,7 @@ export default function BlogCard({ post, onSelect, featured }: BlogCardProps) {
 
   return (
     <article
-      onClick={() => onSelect(post.slug.current)}
+      onClick={() => post.slug?.current && onSelect(post.slug.current)}
       className={`group cursor-pointer bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col ${
         featured ? 'md:flex-row md:h-72' : ''
       }`}

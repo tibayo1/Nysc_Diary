@@ -215,8 +215,14 @@ export default function BlogPostPage({ slug, onBack, onNavigate }: BlogPostPageP
           {/* Article body */}
           <div className="prose-base max-w-none">
             {post.body ? (
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              <PortableText value={post.body} components={ptComponents as any} />
+              (() => {
+                try {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  return <PortableText value={post.body} components={ptComponents as any} />;
+                } catch {
+                  return <p className="text-gray-400 italic">Could not render article content.</p>;
+                }
+              })()
             ) : (
               <p className="text-gray-400 italic">No content yet.</p>
             )}
@@ -244,12 +250,19 @@ export default function BlogPostPage({ slug, onBack, onNavigate }: BlogPostPageP
           </div>
 
           {/* Related posts */}
-          {related.length > 0 && (
+          {related.filter((rp) => rp.slug?.current).length > 0 && (
             <div>
               <h3 className="font-heading font-bold text-gray-900 text-base mb-4">Related Posts</h3>
               <div className="space-y-3">
-                {related.map((rp) => (
-                  <BlogCard key={rp._id} post={rp} onSelect={(s) => { window.scrollTo({ top: 0 }); onBack(); setTimeout(() => onNavigate('blog-post'), 10); }} />
+                {related.filter((rp) => rp.slug?.current).map((rp) => (
+                  <BlogCard
+                    key={rp._id}
+                    post={rp}
+                    onSelect={(s) => {
+                      window.scrollTo({ top: 0 });
+                      onNavigate('blog-post', s);
+                    }}
+                  />
                 ))}
               </div>
             </div>
