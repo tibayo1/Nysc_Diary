@@ -7,7 +7,7 @@ export const sanityClient = createClient({
   projectId: '8uobuwdy',
   dataset: 'production',
   apiVersion: '2024-01-01',
-  useCdn: true, // fast cached reads for published content
+  useCdn: false, // always fetch fresh — CDN can lag on newly published posts
 });
 
 const builder = imageUrlBuilder(sanityClient);
