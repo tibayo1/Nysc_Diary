@@ -15,6 +15,12 @@ import {
 import { db } from './firebase';
 import { Thread, Reply } from '../types';
 
+// Guard: throws a clear error if Firebase wasn't initialized (missing env vars)
+function getDb() {
+  if (!db) throw new Error('Firebase is not initialized. Check environment variables in Cloudflare Pages settings.');
+  return db;
+}
+
 // ─── Username derivation ──────────────────────────────────────────────────────
 export function deriveUsername(email: string): string {
   return email.split('@')[0].replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
@@ -24,7 +30,7 @@ export function deriveUsername(email: string): string {
 
 // Fetch all threads once, filter in JS to avoid composite index requirements
 async function fetchAllThreads(): Promise<Thread[]> {
-  const q = query(collection(db, 'threads'), orderBy('createdAt', 'desc'), limit(100));
+  const q = query(collection(getDb(), 'threads'), orderBy('createdAt', 'desc'), limit(100));
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Thread, 'id'>) }));
 }
@@ -42,7 +48,7 @@ export async function getThreads(tag?: string): Promise<Thread[]> {
 }
 
 export async function getThreadById(threadId: string): Promise<Thread | null> {
-  const ref = doc(db, 'threads', threadId);
+  const ref = doc(getDb(), 'threads', threadId);
   const snap = await getDoc(ref);
   if (!snap.exists()) return null;
   return { id: snap.id, ...(snap.data() as Omit<Thread, 'id'>) };
@@ -54,7 +60,7 @@ export async function createThread(data: {
   tag: string;
   authorEmail: string;
 }): Promise<string> {
-  const ref = await addDoc(collection(db, 'threads'), {
+  const ref = await addDoc(collection(getDb(), 'threads'), {
     title: data.title,
     body: data.body,
     tag: data.tag,
@@ -70,7 +76,7 @@ export async function createThread(data: {
 // ─── Replies ──────────────────────────────────────────────────────────────────
 export async function getReplies(threadId: string): Promise<Reply[]> {
   const q = query(
-    collection(db, 'threads', threadId, 'replies'),
+    collection(getDb(), 'threads', threadId, 'replies'),
     orderBy('createdAt', 'asc')
   );
   const snap = await getDocs(q);
@@ -81,7 +87,7 @@ export async function createReply(
   threadId: string,
   data: { body: string; authorEmail: string }
 ): Promise<Reply> {
-  const repliesRef = collection(db, 'threads', threadId, 'replies');
+  const repliesRef = collection(getDb(), 'threads', threadId, 'replies');
   const ref = await addDoc(repliesRef, {
     body: data.body,
     authorEmail: data.authorEmail,
@@ -89,7 +95,7 @@ export async function createReply(
     createdAt: serverTimestamp(),
   });
   // Increment reply count on parent thread
-  await updateDoc(doc(db, 'threads', threadId), { replyCount: increment(1) });
+  await updateDoc(doc(getDb(), 'threads', threadId), { replyCount: increment(1) });
 
   return {
     id: ref.id,

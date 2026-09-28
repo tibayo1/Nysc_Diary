@@ -12,13 +12,13 @@ interface HomeProps {
 
 
 const featuredCorper: Corper = {
-  id: '1',
-  name: 'Afolagboye Solomon Irenitemi',
-  state: 'Kwara State',
-  ppa: 'Omu-Aran High School',
-  story: 'From a difficult registration process to creating impact in Kwara State, Solomon\'s NYSC journey is a reminder that fear only becomes a limit when we refuse to face it. As CDS President, he led the construction of incinerators, provided chairs, lockers, and more…',
-  image: '/solomon-irenitemi.jpg',
-  date: '2026-07-17'
+  id: '2',
+  name: 'Oluwasegun Oyewale',
+  state: 'Lagos State',
+  ppa: 'Ikorodu, Lagos State',
+  story: 'A UNILAG alumnus using his service year to champion mathematics education in Ikorodu. As Project Coordinator of Project INSPIRE IKORODU, he is organising an inter-school mathematics competition for public secondary schools and providing educational interventions for the winning school…',
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/3667436d5a72bfc7ac2a962f47df8a8c3a275680-1672x941.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-09-25',
 };
 
 const trendingTopics = [

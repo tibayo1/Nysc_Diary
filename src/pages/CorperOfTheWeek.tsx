@@ -1,32 +1,40 @@
-import { MapPin, Briefcase, Calendar, Star, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { MapPin, Briefcase, Calendar, Star, Send, CheckCircle, AlertCircle, Loader2, BookOpen, ExternalLink } from 'lucide-react';
 import { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import { Corper } from '../types';
 import { Reveal } from '../hooks/useScrollReveal';
 
-const corpers: Corper[] = [
+// ─── Current featured corper (index 0 = this week's spotlight) ───────────────
+const featuredCorper: Corper = {
+  id: '2',
+  name: 'Oluwasegun Oyewale',
+  state: 'Lagos State',
+  ppa: 'Ikorodu, Lagos State',
+  story: `Oluwasegun Oyewale, a University of Lagos alumnus, is using his service year to promote academic excellence and educational development in Ikorodu, Lagos State.
+
+As the Project Coordinator of Project INSPIRE IKORODU — an NYSC Community Development Service initiative — he is organising a one-day inter-school mathematics competition for selected public secondary schools in Ikorodu.
+
+The initiative is built to build students' confidence and interest in mathematics while recognising academic excellence among participating schools.
+
+Beyond the competition itself, Project INSPIRE IKORODU plans to provide a needs-based educational intervention for the winning school — addressing an identified need within the school and creating lasting impact that continues long after the competition ends.
+
+Oluwasegun's initiative demonstrates how corps members can use their service year to identify challenges within their host communities and develop practical, meaningful responses.
+
+NYSC Diary is proud to serve as the official Media and Publicity Partner of Project INSPIRE IKORODU.`,
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/3667436d5a72bfc7ac2a962f47df8a8c3a275680-1672x941.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-09-25',
+};
+
+// ─── Past corpers archive ────────────────────────────────────────────────────
+const pastCorpers: Corper[] = [
   {
     id: '1',
     name: 'Afolagboye Solomon Irenitemi',
     state: 'Kwara State',
     ppa: 'Omu-Aran High School',
-    story: `Afolagboye Solomon Irenitemi's NYSC journey did not begin smoothly. After graduating in August 2024, he waited for months without seeing his call-up number. When his call-up letter finally came in July, he was posted to Kwara State.
-
-Even before camp, Solomon faced one of his first major challenges: a four-day registration struggle. But despite the rough beginning, he remained determined to complete his service year with purpose.
-
-Although he studied Quantity Surveying, Solomon was posted to Omu-Aran High School, where he served as an assistant Physics and trade subject teacher. For someone trained in a different field, teaching subjects such as animal husbandry was unexpected, but it became one of the surprisingly fulfilling parts of his service year.
-
-Like many corps members, Solomon had to deal with the realities of service: finding accommodation, commuting daily, and raising funds for his personal CDS project. However, his most memorable moments came from his CDS meetings and the support of his colleagues.
-
-As CDS President, Solomon found leadership easier because of the people around him. His colleagues rallied behind his project, which included the construction of two incinerators, provision of chairs, lockers, hand-wash stands, and a whiteboard.
-
-For Solomon, the service year became more than just fulfilling a national requirement. It became a journey of courage, leadership, impact, and gratitude.
-
-"I've learnt that fear avoided becomes our limit. I'm grateful my story inspired colleagues, students, and management. By God's grace and the wonderful people around me, the journey ended smoothly."
-
-Solomon's story reminds us that even when the journey starts roughly, it can still end with impact, growth, and purpose.`,
+    story: `Solomon's NYSC journey didn't begin smoothly — from a months-long wait for his call-up letter to a four-day registration struggle. Yet he served with purpose in Kwara State, teaching Physics and trade subjects despite studying Quantity Surveying. As CDS President, he led the construction of two incinerators and provided chairs, lockers, and more for his school. "I've learnt that fear avoided becomes our limit."`,
     image: '/solomon-irenitemi.jpg',
-    date: '2026-07-17'
+    date: '2026-07-17',
   },
 ];
 
@@ -88,12 +96,12 @@ export default function CorperOfTheWeek() {
       {/* Featured Corper */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Reveal>
-          <div className="relative bg-gradient-to-br from-nysc-50 via-white to-accent-50 rounded-3xl shadow-lg p-8 md:p-10 md:flex items-center gap-10 border border-nysc-100/50 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-nysc-50 via-white to-accent-50 rounded-3xl shadow-lg p-8 md:p-10 md:flex items-start gap-10 border border-nysc-100/50 overflow-hidden">
             <div className="deco-circle w-40 h-40 bg-accent-500/5 -top-10 -right-10" aria-hidden="true" />
             <img
-              src={corpers[0].image}
-              alt={corpers[0].name}
-              className="w-full md:w-80 h-80 object-cover rounded-2xl shadow-md"
+              src={featuredCorper.image}
+              alt={featuredCorper.name}
+              className="w-full md:w-80 h-80 object-cover rounded-2xl shadow-md flex-shrink-0"
               width={320}
               height={320}
               loading="lazy"
@@ -104,27 +112,81 @@ export default function CorperOfTheWeek() {
                 Featured This Week
               </div>
               <h2 className="text-3xl font-display font-bold text-gray-900 mb-4">
-                {corpers[0].name}
+                {featuredCorper.name}
               </h2>
               <div className="flex flex-col gap-2 mb-5">
                 <div className="flex items-center text-gray-600 font-body text-sm">
-                  <MapPin className="w-5 h-5 mr-2 text-nysc-600" aria-hidden="true" />
-                  {corpers[0].state}
+                  <MapPin className="w-5 h-5 mr-2 text-nysc-600 flex-shrink-0" aria-hidden="true" />
+                  {featuredCorper.state}
                 </div>
                 <div className="flex items-center text-gray-600 font-body text-sm">
-                  <Briefcase className="w-5 h-5 mr-2 text-nysc-600" aria-hidden="true" />
-                  {corpers[0].ppa}
+                  <Briefcase className="w-5 h-5 mr-2 text-nysc-600 flex-shrink-0" aria-hidden="true" />
+                  Project INSPIRE IKORODU — NYSC CDS Initiative
                 </div>
                 <div className="flex items-center text-gray-600 font-body text-sm">
-                  <Calendar className="w-5 h-5 mr-2 text-nysc-600" aria-hidden="true" />
-                  {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(corpers[0].date))}
+                  <Calendar className="w-5 h-5 mr-2 text-nysc-600 flex-shrink-0" aria-hidden="true" />
+                  {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(featuredCorper.date))}
                 </div>
               </div>
-              <p className="text-gray-700 font-body text-lg leading-relaxed">{corpers[0].story}</p>
+
+              {/* Story rendered as paragraphs */}
+              <div className="space-y-3 mb-6">
+                {featuredCorper.story.split('\n\n').map((para, i) => (
+                  <p key={i} className="text-gray-700 font-body text-base leading-relaxed">{para}</p>
+                ))}
+              </div>
+
+              {/* Link to full blog post */}
+              <a
+                href="#blog-post/corper-of-the-week-oluwasegun-oyewale-project-inspire-ikorodu"
+                onClick={(e) => { e.preventDefault(); window.location.hash = 'blog-post/corper-of-the-week-oluwasegun-oyewale-project-inspire-ikorodu'; }}
+                className="inline-flex items-center gap-2 bg-nysc-600 hover:bg-nysc-700 text-white px-5 py-2.5 rounded-xl font-display font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md"
+              >
+                <BookOpen className="w-4 h-4" aria-hidden="true" />
+                Read Full Story
+                <ExternalLink className="w-3.5 h-3.5 opacity-70" aria-hidden="true" />
+              </a>
             </div>
           </div>
         </Reveal>
       </section>
+
+      {/* Past Corpers Archive */}
+      {pastCorpers.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+          <Reveal>
+            <h2 className="text-2xl font-display font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <Star className="w-5 h-5 text-nysc-600" aria-hidden="true" />
+              Past Corpers of the Week
+            </h2>
+          </Reveal>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pastCorpers.map((corper) => (
+              <Reveal key={corper.id}>
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">
+                  <img
+                    src={corper.image}
+                    alt={corper.name}
+                    className="w-full h-48 object-cover"
+                    loading="lazy"
+                  />
+                  <div className="p-5">
+                    <h3 className="font-display font-bold text-gray-900 text-lg mb-1">{corper.name}</h3>
+                    <div className="flex items-center text-gray-500 text-sm mb-3 gap-1">
+                      <MapPin className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+                      {corper.state}
+                    </div>
+                    <p className="text-gray-600 font-body text-sm leading-relaxed line-clamp-3">{corper.story}</p>
+                    <p className="text-xs text-gray-400 mt-3">
+                      {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(corper.date))}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Nomination Form */}
       <section className="relative overflow-hidden bg-gradient-to-br from-nysc-700 via-nysc-600 to-nysc-800 text-white py-20">
