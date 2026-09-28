@@ -271,7 +271,7 @@ export default function Home({ onNavigate }: HomeProps) {
               <Reveal key={index} delay={index * 0.1}>
                 <div
                   className="bg-white rounded-2xl shadow-sm p-8 card-hover cursor-pointer group border border-gray-100"
-                  onClick={() => onNavigate('blog')}
+                  onClick={() => onNavigate('community')}
                 >
                   <div className={`w-14 h-14 bg-gradient-to-br ${topic.color} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
                     <topic.icon className="h-7 w-7 text-white" aria-hidden="true" />
