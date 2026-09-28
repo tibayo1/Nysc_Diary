@@ -25,6 +25,8 @@ export default function BlogComments({ postSlug }: BlogCommentsProps) {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!db) return; // Firebase not configured — skip comments
+
     const q = query(
       collection(db, 'blog_comments'),
       where('postSlug', '==', postSlug),
@@ -50,6 +52,7 @@ export default function BlogComments({ postSlug }: BlogCommentsProps) {
     setSubmitting(true);
     setError('');
     try {
+      if (!db) throw new Error('Comments unavailable');
       await addDoc(collection(db, 'blog_comments'), {
         postSlug,
         name: name.trim(),

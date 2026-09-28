@@ -31,6 +31,8 @@ export default function BlogReactions({ postSlug }: BlogReactionsProps) {
   const sessionKey = `blog_reaction_${postSlug}`;
 
   useEffect(() => {
+    if (!db) { setLoading(false); return; } // Firebase not configured
+
     const stored = sessionStorage.getItem(sessionKey);
     if (stored) setReacted(stored);
 
@@ -39,7 +41,7 @@ export default function BlogReactions({ postSlug }: BlogReactionsProps) {
       await Promise.all(
         EMOJIS.map(async ({ emoji }) => {
           const id = `${postSlug}_${emoji}`;
-          const snap = await getDoc(doc(collection(db, 'blog_reactions'), id));
+          const snap = await getDoc(doc(collection(db!, 'blog_reactions'), id));
           result[emoji] = snap.exists() ? (snap.data().count ?? 0) : 0;
         })
       );
@@ -51,7 +53,7 @@ export default function BlogReactions({ postSlug }: BlogReactionsProps) {
   }, [postSlug, sessionKey]);
 
   const handleReact = async (emoji: string) => {
-    if (reacted) return; // already reacted this session
+    if (reacted || !db) return; // already reacted or Firebase not configured
 
     const id = `${postSlug}_${emoji}`;
     const ref = doc(collection(db, 'blog_reactions'), id);
