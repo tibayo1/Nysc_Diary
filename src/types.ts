@@ -45,6 +45,7 @@ export interface Corper {
   story: string;
   image: string;
   date: string;
+  slug?: string;
 }
 
 export interface PricingPlan {

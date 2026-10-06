@@ -6,27 +6,36 @@ import { Reveal } from '../hooks/useScrollReveal';
 
 // ─── Current featured corper (index 0 = this week's spotlight) ───────────────
 const featuredCorper: Corper = {
-  id: '2',
-  name: 'Oluwasegun Oyewale',
-  state: 'Lagos State',
-  ppa: 'Ikorodu, Lagos State',
-  story: `Oluwasegun Oyewale, a University of Lagos alumnus, is using his service year to promote academic excellence and educational development in Ikorodu, Lagos State.
+  id: '3',
+  name: 'Faithfulness Agbonlahor',
+  state: 'Ondo State',
+  ppa: 'Gender & Charity CDS — Akure South, Ondo State',
+  story: `Faithfulness Agbonlahor is a corps member serving in Ondo State and president of her Gender and Charity Community Development Service group. For using her NYSC year to support girls, improve a public-school learning environment and turn community service into measurable action, she is our Corper of the Week.
 
-As the Project Coordinator of Project INSPIRE IKORODU — an NYSC Community Development Service initiative — he is organising a one-day inter-school mathematics competition for selected public secondary schools in Ikorodu.
+Her personal CDS project in Akure South was built around practical community needs: teenage empowerment, menstrual dignity, educational support, and school renovation.
 
-The initiative is built to build students' confidence and interest in mathematics while recognising academic excellence among participating schools.
+As reported by The Hope Newspaper and documented in her project updates, the initiative empowered over 2,500 girls across secondary schools and renovated 12 classroom windows across three classrooms in a public primary school to create a safer, more conducive learning environment.
 
-Beyond the competition itself, Project INSPIRE IKORODU plans to provide a needs-based educational intervention for the winning school — addressing an identified need within the school and creating lasting impact that continues long after the competition ends.
+In addition, Faithfulness distributed 500 sanitary pads alongside menstrual-hygiene sensitisation, distributed 100 copies of her book "The Hidden Chains", and provided educational materials for primary school pupils in need.
 
-Oluwasegun's initiative demonstrates how corps members can use their service year to identify challenges within their host communities and develop practical, meaningful responses.
-
-NYSC Diary is proud to serve as the official Media and Publicity Partner of Project INSPIRE IKORODU.`,
-  image: 'https://cdn.sanity.io/images/8uobuwdy/production/3667436d5a72bfc7ac2a962f47df8a8c3a275680-1672x941.png?w=640&h=640&fit=crop&auto=format',
-  date: '2026-09-25',
+Her story captures the spirit of national service at its best: noticing community challenges and using determination, collaboration, and leadership to leave a lasting impact.`,
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/b0a521bc948e0e30e565855b5f25ab9a7fb4c67e-1280x720.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-10-06',
+  slug: 'corper-of-the-week-faithfulness-agbonlahor-akure-impact',
 };
 
 // ─── Past corpers archive ────────────────────────────────────────────────────
 const pastCorpers: Corper[] = [
+  {
+    id: '2',
+    name: 'Oluwasegun Oyewale',
+    state: 'Lagos State',
+    ppa: 'Project INSPIRE IKORODU — Lagos State',
+    story: `Oluwasegun, a UNILAG alumnus serving in Lagos State, founded Project INSPIRE IKORODU to champion mathematics education in public secondary schools. Through an inter-school mathematics competition and needs-based educational interventions, he demonstrated how corps members can create practical, lasting responses to educational challenges in host communities.`,
+    image: 'https://cdn.sanity.io/images/8uobuwdy/production/3667436d5a72bfc7ac2a962f47df8a8c3a275680-1672x941.png?w=640&h=640&fit=crop&auto=format',
+    date: '2026-09-25',
+    slug: 'corper-of-the-week-oluwasegun-oyewale-project-inspire-ikorodu',
+  },
   {
     id: '1',
     name: 'Afolagboye Solomon Irenitemi',
@@ -125,7 +134,7 @@ export default function CorperOfTheWeek({ onNavigate }: CorperOfTheWeekProps) {
                 </div>
                 <div className="flex items-center text-gray-600 font-body text-sm">
                   <Briefcase className="w-5 h-5 mr-2 text-nysc-600 flex-shrink-0" aria-hidden="true" />
-                  Project INSPIRE IKORODU — NYSC CDS Initiative
+                  {featuredCorper.ppa}
                 </div>
                 <div className="flex items-center text-gray-600 font-body text-sm">
                   <Calendar className="w-5 h-5 mr-2 text-nysc-600 flex-shrink-0" aria-hidden="true" />
@@ -141,14 +150,16 @@ export default function CorperOfTheWeek({ onNavigate }: CorperOfTheWeekProps) {
               </div>
 
               {/* Link to full blog post */}
-              <button
-                onClick={() => onNavigate('blog-post', 'corper-of-the-week-oluwasegun-oyewale-project-inspire-ikorodu')}
-                className="inline-flex items-center gap-2 bg-nysc-600 hover:bg-nysc-700 text-white px-5 py-2.5 rounded-xl font-display font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md"
-              >
-                <BookOpen className="w-4 h-4" aria-hidden="true" />
-                Read Full Story
-                <ExternalLink className="w-3.5 h-3.5 opacity-70" aria-hidden="true" />
-              </button>
+              {featuredCorper.slug && (
+                <button
+                  onClick={() => onNavigate('blog-post', featuredCorper.slug)}
+                  className="inline-flex items-center gap-2 bg-nysc-600 hover:bg-nysc-700 text-white px-5 py-2.5 rounded-xl font-display font-semibold text-sm transition-all duration-200 shadow-sm hover:shadow-md"
+                >
+                  <BookOpen className="w-4 h-4" aria-hidden="true" />
+                  Read Full Story
+                  <ExternalLink className="w-3.5 h-3.5 opacity-70" aria-hidden="true" />
+                </button>
+              )}
             </div>
           </div>
         </Reveal>
@@ -166,23 +177,33 @@ export default function CorperOfTheWeek({ onNavigate }: CorperOfTheWeekProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {pastCorpers.map((corper) => (
               <Reveal key={corper.id}>
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200 flex flex-col h-full">
                   <img
                     src={corper.image}
                     alt={corper.name}
                     className="w-full h-48 object-cover"
                     loading="lazy"
                   />
-                  <div className="p-5">
+                  <div className="p-5 flex flex-col flex-1">
                     <h3 className="font-display font-bold text-gray-900 text-lg mb-1">{corper.name}</h3>
                     <div className="flex items-center text-gray-500 text-sm mb-3 gap-1">
                       <MapPin className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
                       {corper.state}
                     </div>
-                    <p className="text-gray-600 font-body text-sm leading-relaxed line-clamp-3">{corper.story}</p>
-                    <p className="text-xs text-gray-400 mt-3">
-                      {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(corper.date))}
-                    </p>
+                    <p className="text-gray-600 font-body text-sm leading-relaxed line-clamp-3 mb-4">{corper.story}</p>
+                    <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
+                      <p className="text-xs text-gray-400">
+                        {new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(new Date(corper.date))}
+                      </p>
+                      {corper.slug && (
+                        <button
+                          onClick={() => onNavigate('blog-post', corper.slug)}
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-nysc-600 hover:text-nysc-700 transition-colors"
+                        >
+                          Read Story &rarr;
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Reveal>

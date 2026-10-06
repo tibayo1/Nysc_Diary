@@ -12,13 +12,14 @@ interface HomeProps {
 
 
 const featuredCorper: Corper = {
-  id: '2',
-  name: 'Oluwasegun Oyewale',
-  state: 'Lagos State',
-  ppa: 'Ikorodu, Lagos State',
-  story: 'A UNILAG alumnus using his service year to champion mathematics education in Ikorodu. As Project Coordinator of Project INSPIRE IKORODU, he is organising an inter-school mathematics competition for public secondary schools and providing educational interventions for the winning school…',
-  image: 'https://cdn.sanity.io/images/8uobuwdy/production/3667436d5a72bfc7ac2a962f47df8a8c3a275680-1672x941.png?w=640&h=640&fit=crop&auto=format',
-  date: '2026-09-25',
+  id: '3',
+  name: 'Faithfulness Agbonlahor',
+  state: 'Ondo State',
+  ppa: 'Akure South, Ondo State',
+  story: 'President of her Gender and Charity CDS group in Ondo State, Faithfulness turned her service year into tangible community impact — reaching 2,500 girls with empowerment and menstrual hygiene support, distributing 100 copies of her book, and renovating classroom windows across three public school classrooms in Akure…',
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/b0a521bc948e0e30e565855b5f25ab9a7fb4c67e-1280x720.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-10-06',
+  slug: 'corper-of-the-week-faithfulness-agbonlahor-akure-impact',
 };
 
 const trendingTopics = [
