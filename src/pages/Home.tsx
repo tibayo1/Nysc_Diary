@@ -12,14 +12,14 @@ interface HomeProps {
 
 
 const featuredCorper: Corper = {
-  id: '3',
-  name: 'Faithfulness Agbonlahor',
-  state: 'Ondo State',
-  ppa: 'Akure South, Ondo State',
-  story: 'President of her Gender and Charity CDS group in Ondo State, Faithfulness turned her service year into tangible community impact — reaching 2,500 girls with empowerment and menstrual hygiene support, distributing 100 copies of her book, and renovating classroom windows across three public school classrooms in Akure…',
-  image: 'https://cdn.sanity.io/images/8uobuwdy/production/b0a521bc948e0e30e565855b5f25ab9a7fb4c67e-1280x720.png?w=640&h=640&fit=crop&auto=format',
-  date: '2026-10-06',
-  slug: 'corper-of-the-week-faithfulness-agbonlahor-akure-impact',
+  id: '4',
+  name: 'Igba Civirter Barnabas',
+  state: 'Adamawa State',
+  ppa: 'Numan LGA, Adamawa State',
+  story: 'Serving in Adamawa State, Barnabas carried out a personal CDS project at Numan I Primary School — renovating a full classroom block and donating 50 sturdy desks for pupils, restoring safe and dignified learning spaces for the school community…',
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/df3e0c9ffe07bec1c4dcfa5e0094fec9401d2243-1672x941.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-10-12',
+  slug: 'corper-of-the-week-igba-civirter-barnabas-adamawa-school',
 };
 
 const trendingTopics = [

@@ -6,26 +6,34 @@ import { Reveal } from '../hooks/useScrollReveal';
 
 // ─── Current featured corper (index 0 = this week's spotlight) ───────────────
 const featuredCorper: Corper = {
-  id: '3',
-  name: 'Faithfulness Agbonlahor',
-  state: 'Ondo State',
-  ppa: 'Gender & Charity CDS — Akure South, Ondo State',
-  story: `Faithfulness Agbonlahor is a corps member serving in Ondo State and president of her Gender and Charity Community Development Service group. For using her NYSC year to support girls, improve a public-school learning environment and turn community service into measurable action, she is our Corper of the Week.
+  id: '4',
+  name: 'Igba Civirter Barnabas',
+  state: 'Adamawa State',
+  ppa: 'Numan I Primary School — Numan LGA, Adamawa State',
+  story: `Igba Civirter Barnabas is a corps member serving in Adamawa State who chose to address a fundamental challenge affecting pupils and teachers at Numan I Primary School in Numan Local Government Area.
 
-Her personal CDS project in Akure South was built around practical community needs: teenage empowerment, menstrual dignity, educational support, and school renovation.
+Recognising that damaged classrooms and a lack of seating severely hindered lessons, Barnabas took action through his personal Community Development Service (CDS) project by renovating a full classroom block and donating 50 sturdy classroom desks for the pupils.
 
-As reported by The Hope Newspaper and documented in her project updates, the initiative empowered over 2,500 girls across secondary schools and renovated 12 classroom windows across three classrooms in a public primary school to create a safer, more conducive learning environment.
+The intervention was officially commissioned with NYSC officials and members of the Numan host community present, with an Assistant Director from the NYSC National Directorate Headquarters commending the project for responding to genuine educational needs.
 
-In addition, Faithfulness distributed 500 sanitary pads alongside menstrual-hygiene sensitisation, distributed 100 copies of her book "The Hidden Chains", and provided educational materials for primary school pupils in need.
-
-Her story captures the spirit of national service at its best: noticing community challenges and using determination, collaboration, and leadership to leave a lasting impact.`,
-  image: 'https://cdn.sanity.io/images/8uobuwdy/production/b0a521bc948e0e30e565855b5f25ab9a7fb4c67e-1280x720.png?w=640&h=640&fit=crop&auto=format',
-  date: '2026-10-06',
-  slug: 'corper-of-the-week-faithfulness-agbonlahor-akure-impact',
+His project demonstrates the very essence of impactful community development: identifying an observable problem, consulting beneficiaries, and rallying stakeholders to deliver practical, lasting solutions that serve pupils with dignity long after the service year ends.`,
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/df3e0c9ffe07bec1c4dcfa5e0094fec9401d2243-1672x941.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-10-12',
+  slug: 'corper-of-the-week-igba-civirter-barnabas-adamawa-school',
 };
 
 // ─── Past corpers archive ────────────────────────────────────────────────────
 const pastCorpers: Corper[] = [
+  {
+    id: '3',
+    name: 'Faithfulness Agbonlahor',
+    state: 'Ondo State',
+    ppa: 'Gender & Charity CDS — Akure South, Ondo State',
+    story: `President of her Gender and Charity CDS group in Ondo State, Faithfulness turned her service year into tangible community impact — empowering over 2,500 girls with menstrual hygiene sensitisation, distributing 100 copies of her book "The Hidden Chains", and renovating 12 classroom windows across three primary school classrooms in Akure.`,
+    image: 'https://cdn.sanity.io/images/8uobuwdy/production/b0a521bc948e0e30e565855b5f25ab9a7fb4c67e-1280x720.png?w=640&h=640&fit=crop&auto=format',
+    date: '2026-10-06',
+    slug: 'corper-of-the-week-faithfulness-agbonlahor-akure-impact',
+  },
   {
     id: '2',
     name: 'Oluwasegun Oyewale',
