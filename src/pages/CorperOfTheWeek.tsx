@@ -6,24 +6,34 @@ import { Reveal } from '../hooks/useScrollReveal';
 
 // ─── Current featured corper (index 0 = this week's spotlight) ───────────────
 const featuredCorper: Corper = {
-  id: '4',
-  name: 'Igba Civirter Barnabas',
-  state: 'Adamawa State',
-  ppa: 'Numan I Primary School — Numan LGA, Adamawa State',
-  story: `Igba Civirter Barnabas is a corps member serving in Adamawa State who chose to address a fundamental challenge affecting pupils and teachers at Numan I Primary School in Numan Local Government Area.
+  id: '5',
+  name: 'Samson Justina Ojone',
+  state: 'Jigawa State',
+  ppa: 'Government Day Secondary School, Dr. Nuhu — Dutse, Jigawa State',
+  story: `Samson Justina Ojone, a graduate of English and Literary Studies from Prince Abubakar Audu University, Anyigba, made a lasting mark at her place of primary assignment in Dutse, Jigawa State.
 
-Recognising that damaged classrooms and a lack of seating severely hindered lessons, Barnabas took action through his personal Community Development Service (CDS) project by renovating a full classroom block and donating 50 sturdy classroom desks for the pupils.
+Serving at Government Day Secondary School, Dr. Nuhu, Ojone looked beyond classroom teaching to tackle vital sanitation and mentorship needs. Through her personal Community Development Service (CDS) project, she renovated a dilapidated toilet for female students, constructed a dedicated incinerator for sustainable waste disposal, and organised a targeted career guidance session for SS3 students preparing for life after secondary school.
 
-The intervention was officially commissioned with NYSC officials and members of the Numan host community present, with an Assistant Director from the NYSC National Directorate Headquarters commending the project for responding to genuine educational needs.
+The intervention was officially commissioned by the NYSC Jigawa State Coordinator, Alhaji Bala Mohammed Baba, commending her three-part response to the school's educational and environmental needs.
 
-His project demonstrates the very essence of impactful community development: identifying an observable problem, consulting beneficiaries, and rallying stakeholders to deliver practical, lasting solutions that serve pupils with dignity long after the service year ends.`,
-  image: 'https://cdn.sanity.io/images/8uobuwdy/production/df3e0c9ffe07bec1c4dcfa5e0094fec9401d2243-1672x941.png?w=640&h=640&fit=crop&auto=format',
-  date: '2026-10-12',
-  slug: 'corper-of-the-week-igba-civirter-barnabas-adamawa-school',
+Her story highlights the true impact of thoughtful service: identifying practical, everyday needs, engaging host beneficiaries, and combining physical infrastructure with educational mentorship to serve students with dignity.`,
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/cefdeeffc5c0d0ee417e1427366b087a71b193ce-1672x941.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-10-19',
+  slug: 'corper-of-the-week-samson-justina-ojone-jigawa-school',
 };
 
 // ─── Past corpers archive ────────────────────────────────────────────────────
 const pastCorpers: Corper[] = [
+  {
+    id: '4',
+    name: 'Igba Civirter Barnabas',
+    state: 'Adamawa State',
+    ppa: 'Numan I Primary School — Numan LGA, Adamawa State',
+    story: `Serving in Adamawa State, Barnabas renovated a full classroom block and donated 50 sturdy desks for pupils at Numan I Primary School in Numan LGA, restoring physical learning spaces and providing durable school furniture with dignity for the school community.`,
+    image: 'https://cdn.sanity.io/images/8uobuwdy/production/df3e0c9ffe07bec1c4dcfa5e0094fec9401d2243-1672x941.png?w=640&h=640&fit=crop&auto=format',
+    date: '2026-10-12',
+    slug: 'corper-of-the-week-igba-civirter-barnabas-adamawa-school',
+  },
   {
     id: '3',
     name: 'Faithfulness Agbonlahor',

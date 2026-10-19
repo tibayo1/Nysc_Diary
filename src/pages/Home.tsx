@@ -12,14 +12,14 @@ interface HomeProps {
 
 
 const featuredCorper: Corper = {
-  id: '4',
-  name: 'Igba Civirter Barnabas',
-  state: 'Adamawa State',
-  ppa: 'Numan LGA, Adamawa State',
-  story: 'Serving in Adamawa State, Barnabas carried out a personal CDS project at Numan I Primary School — renovating a full classroom block and donating 50 sturdy desks for pupils, restoring safe and dignified learning spaces for the school community…',
-  image: 'https://cdn.sanity.io/images/8uobuwdy/production/df3e0c9ffe07bec1c4dcfa5e0094fec9401d2243-1672x941.png?w=640&h=640&fit=crop&auto=format',
-  date: '2026-10-12',
-  slug: 'corper-of-the-week-igba-civirter-barnabas-adamawa-school',
+  id: '5',
+  name: 'Samson Justina Ojone',
+  state: 'Jigawa State',
+  ppa: 'Dutse, Jigawa State',
+  story: "Serving in Jigawa State, Justina carried out an impactful three-part CDS project at Government Day Secondary School, Dr. Nuhu — renovating a female students' toilet, constructing an incinerator, and organising career guidance for SS3 students…",
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/cefdeeffc5c0d0ee417e1427366b087a71b193ce-1672x941.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-10-19',
+  slug: 'corper-of-the-week-samson-justina-ojone-jigawa-school',
 };
 
 const trendingTopics = [
