@@ -12,14 +12,14 @@ interface HomeProps {
 
 
 const featuredCorper: Corper = {
-  id: '5',
-  name: 'Samson Justina Ojone',
-  state: 'Jigawa State',
-  ppa: 'Dutse, Jigawa State',
-  story: "Serving in Jigawa State, Justina carried out an impactful three-part CDS project at Government Day Secondary School, Dr. Nuhu — renovating a female students' toilet, constructing an incinerator, and organising career guidance for SS3 students…",
-  image: 'https://cdn.sanity.io/images/8uobuwdy/production/cefdeeffc5c0d0ee417e1427366b087a71b193ce-1672x941.png?w=640&h=640&fit=crop&auto=format',
-  date: '2026-10-19',
-  slug: 'corper-of-the-week-samson-justina-ojone-jigawa-school',
+  id: '6',
+  name: 'Suur Tyosaa Demian',
+  state: 'Adamawa State',
+  ppa: 'Hong LGA, Adamawa State',
+  story: 'Serving in Adamawa State, Demian addressed a critical seating shortage at GDSS Thabu — mobilising community stakeholders to construct and deliver comfortable classroom benches so students no longer had to sit on the bare floor…',
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/7ca37d48cb01c850f3aad9bc6b637aa8a5c9f117-1080x607.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-10-26',
+  slug: 'corper-of-the-week-suur-tyosaa-demian-adamawa',
 };
 
 const trendingTopics = [

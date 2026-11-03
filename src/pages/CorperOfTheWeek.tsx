@@ -6,24 +6,34 @@ import { Reveal } from '../hooks/useScrollReveal';
 
 // ─── Current featured corper (index 0 = this week's spotlight) ───────────────
 const featuredCorper: Corper = {
-  id: '5',
-  name: 'Samson Justina Ojone',
-  state: 'Jigawa State',
-  ppa: 'Government Day Secondary School, Dr. Nuhu — Dutse, Jigawa State',
-  story: `Samson Justina Ojone, a graduate of English and Literary Studies from Prince Abubakar Audu University, Anyigba, made a lasting mark at her place of primary assignment in Dutse, Jigawa State.
+  id: '6',
+  name: 'Suur Tyosaa Demian',
+  state: 'Adamawa State',
+  ppa: 'GDSS Thabu — Hong LGA, Adamawa State',
+  story: `Suur Tyosaa Demian is a corps member who served in Adamawa State, with his primary place of assignment at Adamawa State College of Education, Hong. After visiting Government Day Secondary School, Thabu Senior Section, he discovered that students were forced to sit on the floor during lessons due to an acute shortage of classroom furniture.
 
-Serving at Government Day Secondary School, Dr. Nuhu, Ojone looked beyond classroom teaching to tackle vital sanitation and mentorship needs. Through her personal Community Development Service (CDS) project, she renovated a dilapidated toilet for female students, constructed a dedicated incinerator for sustainable waste disposal, and organised a targeted career guidance session for SS3 students preparing for life after secondary school.
+Rather than ignoring the problem, Demian took practical action through his personal Community Development Service (CDS) initiative. He reached out to community members, traditional leaders, and well-meaning individuals to mobilise support, resulting in the construction and delivery of durable classroom benches for the school.
 
-The intervention was officially commissioned by the NYSC Jigawa State Coordinator, Alhaji Bala Mohammed Baba, commending her three-part response to the school's educational and environmental needs.
+The project was officially received and celebrated by school administrators, NYSC officials, and community leaders, restoring comfort and dignified seating for the students.
 
-Her story highlights the true impact of thoughtful service: identifying practical, everyday needs, engaging host beneficiaries, and combining physical infrastructure with educational mentorship to serve students with dignity.`,
-  image: 'https://cdn.sanity.io/images/8uobuwdy/production/cefdeeffc5c0d0ee417e1427366b087a71b193ce-1672x941.png?w=640&h=640&fit=crop&auto=format',
-  date: '2026-10-19',
-  slug: 'corper-of-the-week-samson-justina-ojone-jigawa-school',
+His story offers an inspiring blueprint for impactful service: identifying an everyday community struggle, rallying stakeholders instead of shouldering the entire financial burden alone, and delivering practical solutions that outlast the service year.`,
+  image: 'https://cdn.sanity.io/images/8uobuwdy/production/7ca37d48cb01c850f3aad9bc6b637aa8a5c9f117-1080x607.png?w=640&h=640&fit=crop&auto=format',
+  date: '2026-10-26',
+  slug: 'corper-of-the-week-suur-tyosaa-demian-adamawa',
 };
 
 // ─── Past corpers archive ────────────────────────────────────────────────────
 const pastCorpers: Corper[] = [
+  {
+    id: '5',
+    name: 'Samson Justina Ojone',
+    state: 'Jigawa State',
+    ppa: 'GDSS Dr. Nuhu — Dutse, Jigawa State',
+    story: `Serving in Jigawa State, Justina carried out an impactful three-part CDS project at Government Day Secondary School, Dr. Nuhu — renovating a dilapidated female students' toilet, constructing an incinerator for waste disposal, and organising career guidance for SS3 students.`,
+    image: 'https://cdn.sanity.io/images/8uobuwdy/production/cefdeeffc5c0d0ee417e1427366b087a71b193ce-1672x941.png?w=640&h=640&fit=crop&auto=format',
+    date: '2026-10-19',
+    slug: 'corper-of-the-week-samson-justina-ojone-jigawa-school',
+  },
   {
     id: '4',
     name: 'Igba Civirter Barnabas',
